@@ -1,0 +1,22 @@
+dist: trusty
+sudo: false
+language: python
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+matrix:
+    include:
+      - python: 3.6
+        env: TOXENV=py36
+      - python: 3.6
+        env: TOXENV=mypy
+      - python: 3.6
+        env: TOXENV=flake8
+
+install:
+  - pip install tox
+
+script:
+  - tox
