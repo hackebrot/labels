@@ -4,7 +4,7 @@ about: If something isn't working as expected.
 
 ---
 
-Please note that **gunther** is released with a [Contributor Code of Conduct][code of conduct]. By participating in this project you agree to abide by its terms.
+Please note that **labels** is released with a [Contributor Code of Conduct][code of conduct]. By participating in this project you agree to abide by its terms.
 
 [code of conduct]: /CODE_OF_CONDUCT.md
 
