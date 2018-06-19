@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
 
 
-def gunther() -> None:
+def labels() -> None:
     print("hello world")

@@ -10,22 +10,22 @@ def read(*args: str) -> str:
 
 
 setuptools.setup(
-    name="gunther",
+    name="labels",
     version="0.1.0",
     author="Raphael Pierzina",
     author_email="raphael@hackebrot.de",
     maintainer="Raphael Pierzina",
     maintainer_email="raphael@hackebrot.de",
     license="MIT",
-    url="https://github.com/hackebrot/gunther",
-    description="CLI to manage GitHub projects",
+    url="https://github.com/hackebrot/labels",
+    description="CLI to manage GitHub issue labels",
     long_description=read("README.md"),
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     install_requires=["click"],
-    entry_points={"console_scripts": ["gunther = gunther.cli:gunther"]},
+    entry_points={"console_scripts": ["labels = labels.cli:labels"]},
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 3 - Alpha",
