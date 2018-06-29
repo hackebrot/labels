@@ -35,16 +35,6 @@ class Label:
         """Return label parameters as a tuple."""
         return attr.astuple(self, recurse=True, filter=not_read_only)
 
-    def __eq__(self, other: typing.Any) -> typing.Any:
-        """Check for equality with the given object."""
-        if other.__class__ is not self.__class__:
-            return NotImplemented
-        return self.params_tuple == other.params_tuple
-
-    def __hash__(self) -> int:
-        """Return a hash for the Label."""
-        return hash((self.__class__, *self.params_tuple))
-
 
 class Client:
     base_url: str
