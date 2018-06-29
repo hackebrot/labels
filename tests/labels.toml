@@ -1,0 +1,34 @@
+[bug]
+color = "ea707a"
+description = "Bugs and problems with cookiecutter"
+name = "bug"
+
+["code quality"]
+color = "fcc4db"
+description = "Tasks related to linting, type checks"
+name = "code quality"
+
+[dependencies]
+color = "43a2b7"
+description = "Tasks related to managing dependencies"
+name = "dependencies"
+
+[discussion]
+color = "8f7ad6"
+description = "Issues for discussing ideas for features"
+name = "discussion"
+
+[docs]
+color = "2abf88"
+description = "Tasks to write and update documentation"
+name = "docs"
+
+["good first issue"]
+color = "bfdadc"
+description = "Tasks to pick up by newcomers to the project"
+name = "good first issue"
+
+[infra]
+color = "f9d03b"
+description = "Tasks related to Docker/CI etc."
+name = "infra"
