@@ -22,7 +22,7 @@ setuptools.setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    install_requires=["click", "requests", "pytoml"],
+    install_requires=["click", "requests", "pytoml", "attrs"],
     entry_points={"console_scripts": ["labels = labels.cli:labels"]},
     python_requires=">=3.6",
     classifiers=[
