@@ -160,8 +160,8 @@ Please note that **labels** is released with a
 [Contributor Code of Conduct][code of conduct]. By participating in this
 project you agree to abide by its terms.
 
-[code of conduct]: /.github/CODE_OF_CONDUCT.md
-[contributing]: /.github/CONTRIBUTING.md
+[code of conduct]: https://github.com/hackebrot/labels/blob/master/.github/CODE_OF_CONDUCT.md
+[contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
 [first]: https://github.com/hackebrot/labels/labels/good%20first%20issue
 [toml]: https://github.com/toml-lang/toml
