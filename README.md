@@ -2,6 +2,14 @@
 
 Python 3.6 CLI app to manage GitHub issue labels 📝
 
+## Installation
+
+**labels** is available for download from [PyPI][PyPI] via [pip][pip]:
+
+```text
+$ pip install labels
+```
+
 ## Authentication
 
 The labels CLI connects to the GitHub API to modify issue labels for a GitHub
@@ -157,3 +165,5 @@ project you agree to abide by its terms.
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
 [first]: https://github.com/hackebrot/labels/labels/good%20first%20issue
 [toml]: https://github.com/toml-lang/toml
+[PyPI]: https://pypi.org/
+[pip]: https://pypi.org/project/pip/
