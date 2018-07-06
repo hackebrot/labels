@@ -188,6 +188,64 @@ def fixture_mock_delete_label(base_url: str, owner: str, repo: str) -> None:
         yield
 
 
+@pytest.fixture(name="mock_sync")
+def fixture_mock_sync(
+    base_url: str, owner: str, repo: str, response_list_labels: Response_Labels
+) -> None:
+    with responses.RequestsMock() as rsps:
+        # Response mock for when sync requests the existing remote labels
+        rsps.add(
+            responses.GET,
+            f"{base_url}/repos/{owner}/{repo}/labels",
+            json=response_list_labels,
+            status=200,
+            content_type="application/json",
+        )
+
+        # Response mock for when sync creates the "dependencies" label
+        rsps.add(
+            responses.POST,
+            f"{base_url}/repos/{owner}/{repo}/labels",
+            json={
+                "id": 8080,
+                "node_id": "4848",
+                "url": f"{base_url}/repos/{owner}/{repo}/labels/dependencies",
+                "name": "dependencies",
+                "description": "Tasks related to managing dependencies",
+                "color": "43a2b7",
+                "default": False,
+            },
+            status=201,
+            content_type="application/json",
+        )
+
+        # Response mock for when sync edits the "bug" label
+        rsps.add(
+            responses.PATCH,
+            f"{base_url}/repos/{owner}/{repo}/labels/bug",
+            json={
+                "id": 8888,
+                "node_id": "1010",
+                "url": f"{base_url}/repos/{owner}/{repo}/labels/bug",
+                "name": "bug",
+                "description": "Bugs and problems with cookiecutter",
+                "color": "fcc4db",
+                "default": True,
+            },
+            status=200,
+            content_type="application/json",
+        )
+
+        # Response mock for when sync deletes the "infra" label
+        rsps.add(
+            responses.DELETE,
+            f"{base_url}/repos/{owner}/{repo}/labels/infra",
+            status=204,
+        )
+
+        yield
+
+
 @pytest.fixture(name="labels")
 def fixture_labels() -> typing.List[Label]:
     """Return a list of Label instances."""
@@ -281,3 +339,9 @@ def fixture_labels_file_write(tmpdir) -> str:
 def fixture_labels_file_load() -> str:
     """Return a filepath to an existing labels file."""
     return "tests/labels.toml"
+
+
+@pytest.fixture(name="labels_file_sync")
+def fixture_labels_file_sync(tmpdir) -> str:
+    """Return a filepath to an existing labels file for the sync test."""
+    return "tests/sync.toml"

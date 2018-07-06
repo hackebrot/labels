@@ -35,3 +35,61 @@ def test_fetch(
     )
 
     assert result.exit_code == 0
+
+
+@pytest.mark.usefixtures("mock_sync")
+def test_sync(
+    run_cli: typing.Callable, owner: str, repo: str, labels_file_sync: str
+) -> None:
+    """Test for the CLI sync command."""
+
+    result = run_cli(
+        "-u",
+        "hackebrot",
+        "-t",
+        "1234",
+        "sync",
+        "-o",
+        owner,
+        "-r",
+        repo,
+        "-f",
+        labels_file_sync,
+    )
+
+    assert result.exit_code == 0
+    assert result.output == ""
+
+
+@pytest.mark.usefixtures("mock_list_labels")
+def test_sync_dryrun(
+    run_cli: typing.Callable, owner: str, repo: str, labels_file_sync: str
+) -> None:
+    """Test for the CLI sync command with the dryrun option."""
+
+    result = run_cli(
+        "-u",
+        "hackebrot",
+        "-t",
+        "1234",
+        "sync",
+        "-n",
+        "-o",
+        owner,
+        "-r",
+        repo,
+        "-f",
+        labels_file_sync,
+    )
+
+    assert result.exit_code == 0
+    assert result.output == (
+        "This would delete the following labels:\n"
+        "  - infra\n"
+        "This would update the following labels:\n"
+        "  - bug\n"
+        "This would create the following labels:\n"
+        "  - dependencies\n"
+        "This would NOT modify the following labels:\n"
+        "  - docs\n"
+    )

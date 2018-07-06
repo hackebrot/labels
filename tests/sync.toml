@@ -1,0 +1,14 @@
+[bug]
+color = "fcc4db"
+description = "Bugs and problems with cookiecutter"
+name = "bug"
+
+[dependencies]
+color = "43a2b7"
+description = "Tasks related to managing dependencies"
+name = "dependencies"
+
+[docs]
+color = "2abf88"
+description = "Tasks to write and update documentation"
+name = "docs"
