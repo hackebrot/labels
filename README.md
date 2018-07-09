@@ -160,6 +160,11 @@ Please note that **labels** is released with a
 [Contributor Code of Conduct][code of conduct]. By participating in this
 project you agree to abide by its terms.
 
+## License
+
+Distributed under the terms of the MIT license, **labels** is free and open
+source software.
+
 [code of conduct]: https://github.com/hackebrot/labels/blob/master/.github/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
