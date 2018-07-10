@@ -25,9 +25,9 @@ $ export LABELS_TOKEN="<GITHUB_TOKEN>"
 
 ## Usage
 
-Once you set up the environment variables, you're all set and ready to use
-the labels CLI to manage issue labels for a GitHub repository. The CLI comes
-with two commands: ``fetch`` and ``sync``.
+Once you've installed **labels** and set up the environment variables, you're
+ready to use the **labels** CLI to manage issue labels for a GitHub
+repository. The CLI comes with two commands: ``fetch`` and ``sync``.
 
 Both require you to specify the owner and the name of the GitHub repository
 using CLI options:
@@ -92,11 +92,11 @@ description = "Tasks to write and update documentation"
 name = "docs"
 ```
 
-The section name represents the name of the label for that repository and is
-identical to the ``name`` field when running ``labels fetch``. The fields
-``color``, ``description`` and ``name`` are parameters that can be modified
-with the
-**labels** CLI.
+The section name (``[docs]`` in the example above) represents the name of the
+label for that repository and is identical to the ``name`` field when running
+``labels fetch``. Do not edit the section name of existing labels yourself!
+The fields ``color``, ``description`` and ``name`` are parameters that you
+can edit with the **labels** CLI.
 
 - ``name`` - The name of the label
 - ``description`` - A short description of the label
@@ -111,8 +111,10 @@ that label 🎨
 - You can **create** a new label by adding a new section with your desired
 parameters 📝
 
-It is recommended to check first what **labels** would do, before making any
-changes, with the ``dryrun`` CLI option:
+When creating labels choose a section name identical to the ``name``
+parameter.
+
+Check your label changes before syncing by using the ``dryrun`` CLI option:
 
 ```text
 -n, --dryrun         Do not modify remote labels
@@ -137,10 +139,8 @@ This would NOT modify the following labels:
   - docs
 ```
 
-Once you're happy with your changes, run the ``sync`` command again without
-the ``-n`` option. After **labels** synced the labels with your GitHub
-repository, it will write the updated information to your labels file, so
-that section names match the ``name`` parameter etc.
+Running ``labels sync`` without the ``dryrun`` option also updates the labels
+file, so that section names match the ``name`` parameter.
 
 If **labels** encounters any errors while sending requests to the GitHub API,
 it will print information about the failure and continue with the next
