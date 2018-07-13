@@ -18,6 +18,7 @@ setuptools.setup(
     url="https://github.com/hackebrot/labels",
     description="CLI to manage GitHub issue labels",
     long_description=read("README.md"),
+    long_description_content_type="text/markdown",
     packages=setuptools.find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,
