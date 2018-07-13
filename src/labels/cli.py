@@ -61,8 +61,10 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
     required=True,
 )
 def fetch_cmd(client: Client, owner: str, repo: str, filename: str) -> None:
-    """Fetch Labels for the specified repo and write them to disk."""
+    """Fetch labels for a GitHub repository.
 
+    This will write the labels information to disk to the specified filename.
+    """
     try:
         labels = client.list_labels(owner, repo)
     except LabelsException as exc:
@@ -91,9 +93,11 @@ def fetch_cmd(client: Client, owner: str, repo: str, filename: str) -> None:
 def sync_cmd(
     client: Client, owner: str, repo: str, filename: str, dryrun: bool
 ) -> None:
-    """Load labels from disk, sync them for the specified remote repo and
-    update the local labels file."""
+    """Sync labels with a GitHub repository.
 
+    On success this will also update the local labels file, so that section
+    names match the `name` parameter.
+    """
     labels_to_delete = {}
     labels_to_update = {}
     labels_to_create = {}
