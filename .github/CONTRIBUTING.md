@@ -6,10 +6,10 @@ Every contribution helps to make **labels** a better CLI tool.
 
 Contributions can be made in a number of ways:
 
-- Write [documentation][readme] for users or developers
-- Submit an [issue][new issue] to propose a change or report a bug
-- Code contributions via [Pull Requests][new pull request]
-- Review [Pull Requests][pull requests] and provide constructive feedback
+- Write [documentation][readme] for users or developers 📝
+- Submit an [issue][new issue] to propose a change or report a bug 🐛
+- Code contributions via [Pull Requests][new pull request] 🚀
+- Review [Pull Requests][pull requests] and provide constructive feedback 💻
 
 Any help is greatly appreciated and credit will always be given!
 
