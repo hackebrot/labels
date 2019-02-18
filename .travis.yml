@@ -1,5 +1,4 @@
-dist: trusty
-sudo: false
+dist: xenial
 language: python
 
 cache:
@@ -10,10 +9,12 @@ matrix:
     include:
       - python: 3.6
         env: TOXENV=py36
-      - python: 3.6
-        env: TOXENV=mypy
-      - python: 3.6
+      - python: 3.7
+        env: TOXENV=py37
+      - python: 3.7
         env: TOXENV=flake8
+      - python: 3.7
+        env: TOXENV=mypy
 
 install:
   - pip install tox
