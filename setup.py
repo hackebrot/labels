@@ -16,6 +16,10 @@ setuptools.setup(
     maintainer_email="raphael@hackebrot.de",
     license="MIT",
     url="https://github.com/hackebrot/labels",
+    project_urls={
+        "Repository": "https://github.com/hackebrot/labels",
+        "Issues": "https://github.com/hackebrot/labels/issues",
+    },
     description="Python 3.6 CLI app to manage GitHub issue labels",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
@@ -23,9 +27,9 @@ setuptools.setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
+    python_requires=">=3.6",
     install_requires=["click", "requests", "pytoml", "attrs"],
     entry_points={"console_scripts": ["labels = labels.cli:labels"]},
-    python_requires=">=3.6",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
