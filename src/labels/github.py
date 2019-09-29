@@ -17,8 +17,8 @@ class Label:
     """Represents a GitHub issue label."""
 
     color: str
-    description: str
     name: str
+    description: str = ""
 
     # Read-only attributes
     _default: bool = False
