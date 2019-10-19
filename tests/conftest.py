@@ -281,7 +281,19 @@ def fixture_labels() -> typing.List[Label]:
             name="good first issue",
         ),
         Label(
-            color="f9d03b", description="Tasks related to Docker/CI etc.", name="infra"
+            color="f9d03b",
+            description="Tasks related to Docker/CI etc.",
+            name="infra"
+        ),
+        Label(
+            color="f9d03b",
+            # description="",
+            name="nodesc"
+        ),
+        Label(
+            color="f9d03b",
+            description="",
+            name="emptydesc"
         ),
     ]
 
@@ -324,6 +336,16 @@ def fixture_labels_file_content() -> typing.Dict[str, typing.Any]:
             "color": "f9d03b",
             "description": "Tasks related to Docker/CI etc.",
             "name": "infra",
+        },
+        "nodesc": {
+            "color": "f9d03b",
+            "description": "",
+            "name": "nodesc",
+        },
+        "emptydesc": {
+            "color": "f9d03b",
+            "description": "",
+            "name": "emptydesc",
         },
     }
 

@@ -32,3 +32,13 @@ name = "good first issue"
 color = "f9d03b"
 description = "Tasks related to Docker/CI etc."
 name = "infra"
+
+[nodesc]
+color = "f9d03b"
+# No description
+name = "nodesc"
+
+[emptydesc]
+color = "f9d03b"
+description = ""
+name = "emptydesc"
