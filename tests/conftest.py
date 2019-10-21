@@ -287,13 +287,12 @@ def fixture_labels() -> typing.List[Label]:
         ),
         Label(
             color="f9d03b",
-            # description="",
-            name="nodesc"
+            name="no description"
         ),
         Label(
             color="f9d03b",
             description="",
-            name="emptydesc"
+            name="empty description"
         ),
     ]
 
@@ -337,15 +336,15 @@ def fixture_labels_file_content() -> typing.Dict[str, typing.Any]:
             "description": "Tasks related to Docker/CI etc.",
             "name": "infra",
         },
-        "nodesc": {
+        "no description": {
             "color": "f9d03b",
             "description": "",
-            "name": "nodesc",
+            "name": "no description",
         },
-        "emptydesc": {
+        "empty description": {
             "color": "f9d03b",
             "description": "",
-            "name": "emptydesc",
+            "name": "empty description",
         },
     }
 

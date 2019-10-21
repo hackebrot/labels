@@ -33,12 +33,11 @@ color = "f9d03b"
 description = "Tasks related to Docker/CI etc."
 name = "infra"
 
-[nodesc]
+["no description"]
 color = "f9d03b"
-# No description
-name = "nodesc"
+name = "no description"
 
-[emptydesc]
+["empty description"]
 color = "f9d03b"
 description = ""
-name = "emptydesc"
+name = "empty description"
