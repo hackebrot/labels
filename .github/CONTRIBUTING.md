@@ -21,5 +21,5 @@ abide by its terms.
 [new issue]: https://github.com/hackebrot/labels/issues/new/choose
 [new pull request]: https://github.com/hackebrot/labels/compare
 [pull requests]: https://github.com/hackebrot/labels/pulls
-[code of conduct]: /CODE_OF_CONDUCT.md
-[community]: /COMMUNITY.md
+[code of conduct]: /.github/CODE_OF_CONDUCT.md
+[community]: /.github/COMMUNITY.md
