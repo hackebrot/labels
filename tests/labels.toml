@@ -32,3 +32,12 @@ name = "good first issue"
 color = "f9d03b"
 description = "Tasks related to Docker/CI etc."
 name = "infra"
+
+["no description"]
+color = "f9d03b"
+name = "no description"
+
+["empty description"]
+color = "f9d03b"
+description = ""
+name = "empty description"
