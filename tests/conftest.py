@@ -1,3 +1,4 @@
+import subprocess
 import typing
 
 import pytest
@@ -46,6 +47,35 @@ def fixture_owner() -> str:
 def fixture_repo() -> str:
     """Return a repository name."""
     return "cookiecutter"
+
+
+@pytest.fixture(name="tmp_local_repo")
+def fixture_tmp_local_repo(tmpdir) -> None:
+    """Return a temporary local git repository.
+
+    Mocks a repository cloned from
+    https://github.com/hackebrot/pytest-covfefe.git
+    """
+    subprocess.call(
+        [
+            "git",
+            "-C",
+            str(tmpdir),
+            "init"
+        ]
+    )
+    subprocess.call(
+        [
+            "git",
+            "-C",
+            str(tmpdir),
+            "remote",
+            "add",
+            "origin",
+            "https://github.com/hackebrot/pytest-covfefe.git"
+        ]
+    )
+    return tmpdir
 
 
 @pytest.fixture(name="response_get_bug")
