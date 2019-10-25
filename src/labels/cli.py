@@ -50,7 +50,7 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
 
 @labels.command("fetch")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str, required=True)
+@click.option("-o", "--owner", help="GitHub owner name", type=str, required=False)
 @click.option("-r", "--repo", help="GitHub repository name", type=str, required=True)
 @click.option(
     "-f",
@@ -60,12 +60,16 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
     type=click.Path(),
     required=True,
 )
-def fetch_cmd(client: Client, owner: str, repo: str, filename: str) -> None:
+def fetch_cmd(
+    client: Client, owner: typing.Optional[str], repo: str, filename: str
+) -> None:
     """Fetch labels for a GitHub repository.
 
     This will write the labels information to disk to the specified filename.
     """
     try:
+        if owner is None:
+            owner = 'audreyr'
         labels = client.list_labels(owner, repo)
     except LabelsException as exc:
         click.echo(str(exc))
