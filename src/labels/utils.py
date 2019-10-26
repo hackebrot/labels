@@ -1,17 +1,11 @@
 import subprocess
+import typing
 
 
-def get_owner_from_cwd() -> str:
-    """Return owner of the remote named origin in the current working directory."""
+def get_owner_and_repo_from_cwd() -> typing.Tuple[str, str]:
+    """Return the owner and name of the remote named origin in the cwd."""
     origin_url = (
         subprocess.check_output(["git", "remote", "get-url", "origin"]).decode().strip()
     )
-    return origin_url.split("/")[-2]
-
-
-def get_repo_from_cwd() -> str:
-    """Return the name of the remote named origin in the current working directory."""
-    origin_url = (
-        subprocess.check_output(["git", "remote", "get-url", "origin"]).decode().strip()
-    )
-    return origin_url.split("/")[-1].split('.')[-2]
+    parts = origin_url.split("/")
+    return (parts[-2], parts[-1].split('.')[-2])

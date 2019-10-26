@@ -71,11 +71,11 @@ def fetch_cmd(
     This will write the labels information to disk to the specified filename.
     """
     try:
-        if owner is None:
-            owner = utils.get_owner_from_cwd()
-        if repo is None:
-            repo = utils.get_repo_from_cwd()
-        labels = client.list_labels(owner, repo)
+        inferred_owner, inferred_repo = utils.get_owner_and_repo_from_cwd()
+        labels = client.list_labels(
+            owner or inferred_owner,
+            repo or inferred_repo
+        )
     except LabelsException as exc:
         click.echo(str(exc))
         sys.exit(1)
