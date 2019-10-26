@@ -6,7 +6,7 @@ import typing
 import click
 from requests.auth import HTTPBasicAuth
 
-from labels import __version__
+from labels import __version__, utils
 from labels.exceptions import LabelsException
 from labels.github import Client, Label
 from labels.io import write_labels, read_labels
@@ -69,7 +69,7 @@ def fetch_cmd(
     """
     try:
         if owner is None:
-            owner = 'audreyr'
+            owner = utils.get_owner_from_cwd()
         labels = client.list_labels(owner, repo)
     except LabelsException as exc:
         click.echo(str(exc))
