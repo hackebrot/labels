@@ -51,7 +51,7 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
 @labels.command("fetch")
 @click.pass_obj
 @click.option("-o", "--owner", help="GitHub owner name", type=str, required=False)
-@click.option("-r", "--repo", help="GitHub repository name", type=str, required=True)
+@click.option("-r", "--repo", help="GitHub repository name", type=str, required=False)
 @click.option(
     "-f",
     "--filename",
@@ -61,7 +61,10 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
     required=True,
 )
 def fetch_cmd(
-    client: Client, owner: typing.Optional[str], repo: str, filename: str
+    client: Client,
+    owner: typing.Optional[str],
+    repo: typing.Optional[str],
+    filename: str
 ) -> None:
     """Fetch labels for a GitHub repository.
 
@@ -70,6 +73,8 @@ def fetch_cmd(
     try:
         if owner is None:
             owner = utils.get_owner_from_cwd()
+        if repo is None:
+            repo = utils.get_repo_from_cwd()
         labels = client.list_labels(owner, repo)
     except LabelsException as exc:
         click.echo(str(exc))

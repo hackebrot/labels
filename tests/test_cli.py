@@ -58,6 +58,27 @@ def test_fetch_without_owner_option(
         assert result.exit_code == 0
 
 
+@pytest.mark.usefixtures("mock_list_labels")
+def test_fetch_without_repo_option(
+    run_cli: typing.Callable, owner: str, labels_file_write: str, tmp_local_repo
+) -> None:
+    """Test for the CLI fetch command without -o option supplied."""
+    with tmp_local_repo.as_cwd():
+        result = run_cli(
+            "-u",
+            "hackebrot",
+            "-t",
+            "1234",
+            "fetch",
+            "-o",
+            owner,
+            "-f",
+            labels_file_write,
+        )
+
+        assert result.exit_code == 0
+
+
 @pytest.mark.usefixtures("mock_sync")
 def test_sync(
     run_cli: typing.Callable, owner: str, repo: str, labels_file_sync: str
