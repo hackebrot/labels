@@ -50,11 +50,11 @@ def fixture_repo() -> str:
 
 
 @pytest.fixture(name="tmp_local_repo")
-def fixture_tmp_local_repo(tmpdir) -> None:
+def fixture_tmp_local_repo(tmpdir, owner: str, repo: str) -> None:
     """Return a temporary local git repository.
 
     Mocks a repository cloned from
-    https://github.com/hackebrot/pytest-covfefe.git
+    https://github.com/audreyr/cookiecutter.git
     """
     subprocess.call(
         [
@@ -72,7 +72,7 @@ def fixture_tmp_local_repo(tmpdir) -> None:
             "remote",
             "add",
             "origin",
-            "https://github.com/hackebrot/pytest-covfefe.git"
+            f"https://github.com/{owner}/{repo}.git"
         ]
     )
     return tmpdir
