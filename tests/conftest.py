@@ -1,5 +1,7 @@
 import subprocess
+import shutil
 import typing
+from pathlib import Path
 
 import pytest
 import responses
@@ -55,6 +57,8 @@ def fixture_tmp_local_repo(tmpdir, owner: str, repo: str) -> None:
 
     Mocks a repository cloned from
     https://github.com/audreyr/cookiecutter.git
+    and within which a labels file for the sync test is created
+    ./tests/sync.toml
     """
     subprocess.call(
         [
@@ -75,6 +79,13 @@ def fixture_tmp_local_repo(tmpdir, owner: str, repo: str) -> None:
             f"https://github.com/{owner}/{repo}.git"
         ]
     )
+
+    # copy labels file for the sync test to the directory
+    tmp = Path(str(tmpdir), "tests")
+    tmp.mkdir(exist_ok=True)
+    perm = Path(__file__).parent.joinpath("sync.toml")
+    shutil.copy(perm, tmp)
+
     return tmpdir
 
 
