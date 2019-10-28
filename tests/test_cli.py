@@ -144,6 +144,48 @@ def test_sync_without_owner_option(
         assert result.output == ""
 
 
+@pytest.mark.usefixtures("mock_sync")
+def test_sync_without_repo_option(
+    run_cli: typing.Callable, owner: str, labels_file_sync: str, tmp_local_repo
+) -> None:
+    """Test for the CLI sync command without the -r option supplied."""
+    with tmp_local_repo.as_cwd():
+        result = run_cli(
+            "-u",
+            "hackebrot",
+            "-t",
+            "1234",
+            "sync",
+            "-o",
+            owner,
+            "-f",
+            labels_file_sync,
+        )
+
+        assert result.exit_code == 0
+        assert result.output == ""
+
+
+@pytest.mark.usefixtures("mock_sync")
+def test_sync_without_owner_and_repo_options(
+    run_cli: typing.Callable, labels_file_sync: str, tmp_local_repo
+) -> None:
+    """Test for the CLI sync command without the -o and -r options supplied."""
+    with tmp_local_repo.as_cwd():
+        result = run_cli(
+            "-u",
+            "hackebrot",
+            "-t",
+            "1234",
+            "sync",
+            "-f",
+            labels_file_sync,
+        )
+
+        assert result.exit_code == 0
+        assert result.output == ""
+
+
 @pytest.mark.usefixtures("mock_list_labels")
 def test_sync_dryrun(
     run_cli: typing.Callable, owner: str, repo: str, labels_file_sync: str
