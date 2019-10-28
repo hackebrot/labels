@@ -88,7 +88,7 @@ def fetch_cmd(
 
 @labels.command("sync")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str, required=True)
+@click.option("-o", "--owner", help="GitHub owner name", type=str, required=False)
 @click.option("-r", "--repo", help="GitHub repository name", type=str, required=True)
 @click.option("-n", "--dryrun", help="Do not modify remote labels", is_flag=True)
 @click.option(
@@ -100,7 +100,7 @@ def fetch_cmd(
     required=True,
 )
 def sync_cmd(
-    client: Client, owner: str, repo: str, filename: str, dryrun: bool
+    client: Client, owner: typing.Optional[str], repo: str, filename: str, dryrun: bool
 ) -> None:
     """Sync labels with a GitHub repository.
 
@@ -113,6 +113,9 @@ def sync_cmd(
     labels_to_ignore = {}
 
     local_labels = read_labels(filename)
+
+    inferred_owner, _ = utils.get_owner_and_repo_from_cwd()
+    owner = owner or inferred_owner
 
     try:
         remote_labels = {l.name: l for l in client.list_labels(owner, repo)}
