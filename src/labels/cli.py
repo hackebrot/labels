@@ -50,8 +50,8 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
 
 @labels.command("fetch")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str, required=False)
-@click.option("-r", "--repo", help="GitHub repository name", type=str, required=False)
+@click.option("-o", "--owner", help="GitHub owner name", type=str)
+@click.option("-r", "--repo", help="GitHub repository name", type=str)
 @click.option(
     "-f",
     "--filename",
@@ -88,8 +88,8 @@ def fetch_cmd(
 
 @labels.command("sync")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str, required=False)
-@click.option("-r", "--repo", help="GitHub repository name", type=str, required=False)
+@click.option("-o", "--owner", help="GitHub owner name", type=str)
+@click.option("-r", "--repo", help="GitHub repository name", type=str)
 @click.option("-n", "--dryrun", help="Do not modify remote labels", is_flag=True)
 @click.option(
     "-f",
