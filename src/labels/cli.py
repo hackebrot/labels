@@ -8,11 +8,19 @@ from requests.auth import HTTPBasicAuth
 
 from labels import __version__, utils
 from labels.exceptions import LabelsException
-from labels.github import Client, Label
+from labels.github import Client, Label, Repository
 from labels.io import write_labels, read_labels
 from labels.log import create_logger
 
 Labels_Dict = typing.Dict[str, Label]
+
+
+@attr.s(auto_attribs=True)
+class LabelsContext:
+    """Extra context for label CLI commands."""
+
+    client: Client
+    repository: typing.Optional[Repository] = None
 
 
 @click.group()
@@ -64,7 +72,7 @@ def fetch_cmd(
     client: Client,
     owner: typing.Optional[str],
     repo: typing.Optional[str],
-    filename: str
+    filename: str,
 ) -> None:
     """Fetch labels for a GitHub repository.
 
@@ -72,10 +80,7 @@ def fetch_cmd(
     """
     try:
         inferred_owner, inferred_repo = utils.get_owner_and_repo_from_cwd()
-        labels = client.list_labels(
-            owner or inferred_owner,
-            repo or inferred_repo
-        )
+        labels = client.list_labels(owner or inferred_owner, repo or inferred_repo)
     except LabelsException as exc:
         click.echo(str(exc))
         sys.exit(1)
@@ -104,7 +109,7 @@ def sync_cmd(
     owner: typing.Optional[str],
     repo: typing.Optional[str],
     filename: str,
-    dryrun: bool
+    dryrun: bool,
 ) -> None:
     """Sync labels with a GitHub repository.
 

@@ -7,6 +7,14 @@ import requests
 from labels.exceptions import GitHubException
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class Repository:
+    """Represents a GitHub repository."""
+
+    owner: str
+    name: str
+
+
 def not_read_only(attr: attr.Attribute, value: typing.Any) -> bool:
     """Filter for attr that checks for a leading underscore."""
     return not attr.name.startswith("_")
