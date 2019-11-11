@@ -1,33 +1,51 @@
+import attr
+import pytest
+
 from labels import utils
 
 
-def test_get_owner_and_repo_from_cwd(tmp_local_repo, owner: str, repo: str) -> None:
-    """Test that repo owner and name can be inferred from the
-    local git repo in the current working directory.
-    """
-    with tmp_local_repo.as_cwd():
-        assert utils.get_owner_and_repo_from_cwd() == (owner, repo)
+@attr.s(auto_attribs=True, kw_only=True, frozen=True)
+class FakeProc:
+    """Fake for a CompletedProcess instance."""
+
+    code: int = 0
+    stdout: str = ""
 
 
-def test_extract_o_and_r_from_remote_https_url() -> None:
-    """Test extraction of owner and repo names from HTTPS remote url string."""
-    remote_url = "https://github.com/hackebrot/pytest-covfefe.git"
-    expected_owner = "hackebrot"
-    expected_repo = "pytest-covfefe"
+@pytest.fixture(name="mock_repo_info")
+def fixture_mock_repo_info(mocker, return_value):
+    """Patch the subprocess call to git remote get-url."""
 
-    gotten_owner, gotten_repo = utils._extract_o_and_r(remote_url)
-
-    assert gotten_owner == expected_owner
-    assert gotten_repo == expected_repo
+    return mocker.patch(
+        "labels.utils.subprocess.run", autospec=True, return_value=return_value
+    )
 
 
-def test_extract_o_and_r_from_remote_ssh_url() -> None:
-    """Test extraction of owner and repo names from SSH remote url string."""
-    remote_url = "git@github.com:hackebrot/pytest-covfefe.git"
-    expected_owner = "hackebrot"
-    expected_repo = "pytest-covfefe"
+@pytest.mark.parametrize(
+    "return_value",
+    [
+        FakeProc(code=0, stdout="git@github.com:hackebrot/pytest-emoji.git\n"),
+        FakeProc(code=0, stdout="https://github.com/hackebrot/pytest-emoji.git\n"),
+    ],
+    ids=["ssh", "https"],
+)
+def test_load_repository_info(mock_repo_info):
+    """Test that load_repository_info() works for both SSH and HTTPS URLs."""
 
-    gotten_owner, gotten_repo = utils._extract_o_and_r(remote_url)
+    repo = utils.load_repository_info()
+    assert repo.owner == "hackebrot"
+    assert repo.name == "pytest-emoji"
+    assert mock_repo_info.called
 
-    assert gotten_owner == expected_owner
-    assert gotten_repo == expected_repo
+
+@pytest.mark.parametrize(
+    "return_value",
+    [FakeProc(code=1, stdout=""), FakeProc(code=0, stdout="abcd")],
+    ids=["run_error", "no_match"],
+)
+def test_load_repository_info_run_error(mock_repo_info):
+    """Test that load_repository_info() handles errors."""
+
+    repo = utils.load_repository_info()
+    assert repo is None
+    assert mock_repo_info.called
