@@ -1,21 +1,36 @@
 import re
+import shlex
 import subprocess
 import typing
 
 
-def get_owner_and_repo_from_cwd() -> typing.Tuple[str, str]:
-    """Return the owner and name of the remote named origin in the cwd."""
-    origin_url = (
-        subprocess.check_output(["git", "remote", "get-url", "origin"]).decode().strip()
-    )
-    return _extract_o_and_r(origin_url)
+from labels.github import Repository
 
 
-def _extract_o_and_r(url: str) -> typing.Tuple[str, str]:
-    """Return the owner and repo name of a remote given its SSH or HTTPS url.
+REMOTE_REGEX = re.compile(
+    r"^(https|git)(:\/\/|@)github\.com[\/:](?P<owner>[^\/:]+)\/(?P<name>.+).git$"
+)
 
-    HTTPS url format -> 'https://github.com/user/repo.git'
-    SSH   url format -> 'git@github.com:user/repo.git'
+
+def load_repository_info(remote_name: str = "origin") -> typing.Optional[Repository]:
+    """Load repository information from the local working tree.
+
+    HTTPS url format -> 'https://github.com/owner/name.git'
+    SSH   url format -> 'git@github.com:owner/name.git'
     """
-    parts = re.split(r"[@/:.]+", url)
-    return (parts[-3], parts[-2])
+
+    proc = subprocess.run(
+        shlex.split(f"git remote get-url {remote_name}"),
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    )
+
+    if proc.returncode != 0:
+        return None
+
+    match = REMOTE_REGEX.match(proc.stdout.strip())
+
+    if match is None:
+        return None
+
+    return Repository(owner=match.group("owner"), name=match.group("name"))
