@@ -3,6 +3,7 @@ import operator
 import sys
 import typing
 
+import attr
 import click
 from requests.auth import HTTPBasicAuth
 
@@ -53,13 +54,49 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
     else:
         logger.setLevel(logging.INFO)
 
-    ctx.obj = Client(HTTPBasicAuth(username, token))
+    ctx.obj = LabelsContext(Client(HTTPBasicAuth(username, token)))
+
+
+@click.pass_obj
+def default_owner(labels_context: LabelsContext) -> str:
+    """Load repository owner information from the local working tree."""
+    if labels_context.repository is None:
+        repository = utils.load_repository_info()
+        if repository is None:
+            raise click.BadParameter("Unable to load repository information.")
+        labels_context.repository = repository
+    return labels_context.repository.owner
+
+
+@click.pass_obj
+def default_repo(labels_context: LabelsContext) -> str:
+    """Load repository name information from the local working tree."""
+    if labels_context.repository is None:
+        repository = utils.load_repository_info()
+        if repository is None:
+            raise click.BadParameter("Unable to load repository information.")
+        labels_context.repository = repository
+    return labels_context.repository.name
 
 
 @labels.command("fetch")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str)
-@click.option("-r", "--repo", help="GitHub repository name", type=str)
+@click.option(
+    "-o",
+    "--owner",
+    help="GitHub owner name",
+    type=str,
+    default=default_owner,
+    required=True,
+)
+@click.option(
+    "-r",
+    "--repo",
+    help="GitHub repository name",
+    type=str,
+    default=default_repo,
+    required=True,
+)
 @click.option(
     "-f",
     "--filename",
@@ -68,19 +105,16 @@ def labels(ctx, username: str, token: str, verbose: bool) -> None:
     type=click.Path(),
     required=True,
 )
-def fetch_cmd(
-    client: Client,
-    owner: typing.Optional[str],
-    repo: typing.Optional[str],
-    filename: str,
-) -> None:
+def fetch_cmd(context: LabelsContext, owner: str, repo: str, filename: str) -> None:
     """Fetch labels for a GitHub repository.
 
     This will write the labels information to disk to the specified filename.
     """
+
+    repository = Repository(owner, repo)
+
     try:
-        inferred_owner, inferred_repo = utils.get_owner_and_repo_from_cwd()
-        labels = client.list_labels(owner or inferred_owner, repo or inferred_repo)
+        labels = context.client.list_labels(repository)
     except LabelsException as exc:
         click.echo(str(exc))
         sys.exit(1)
@@ -93,8 +127,22 @@ def fetch_cmd(
 
 @labels.command("sync")
 @click.pass_obj
-@click.option("-o", "--owner", help="GitHub owner name", type=str)
-@click.option("-r", "--repo", help="GitHub repository name", type=str)
+@click.option(
+    "-o",
+    "--owner",
+    help="GitHub owner name",
+    type=str,
+    default=default_owner,
+    required=True,
+)
+@click.option(
+    "-r",
+    "--repo",
+    help="GitHub repository name",
+    type=str,
+    default=default_repo,
+    required=True,
+)
 @click.option("-n", "--dryrun", help="Do not modify remote labels", is_flag=True)
 @click.option(
     "-f",
@@ -105,11 +153,7 @@ def fetch_cmd(
     required=True,
 )
 def sync_cmd(
-    client: Client,
-    owner: typing.Optional[str],
-    repo: typing.Optional[str],
-    filename: str,
-    dryrun: bool,
+    context: LabelsContext, owner: str, repo: str, filename: str, dryrun: bool
 ) -> None:
     """Sync labels with a GitHub repository.
 
@@ -123,12 +167,10 @@ def sync_cmd(
 
     local_labels = read_labels(filename)
 
-    inferred_owner, inferred_repo = utils.get_owner_and_repo_from_cwd()
-    owner = owner or inferred_owner
-    repo = repo or inferred_repo
+    repository = Repository(owner, repo)
 
     try:
-        remote_labels = {l.name: l for l in client.list_labels(owner, repo)}
+        remote_labels = {l.name: l for l in context.client.list_labels(repository)}
     except LabelsException as exc:
         click.echo(str(exc), err=True)
         sys.exit(1)
@@ -174,21 +216,21 @@ def sync_cmd(
 
     for name in labels_to_delete.keys():
         try:
-            client.delete_label(owner, repo, name=name)
+            context.client.delete_label(repository, name=name)
         except LabelsException as exc:
             click.echo(str(exc), err=True)
             failures.append(name)
 
     for name, label in labels_to_update.items():
         try:
-            client.edit_label(owner, repo, name=name, label=label)
+            context.client.edit_label(repository, name=name, label=label)
         except LabelsException as exc:
             click.echo(str(exc), err=True)
             failures.append(name)
 
     for name, label in labels_to_create.items():
         try:
-            client.create_label(owner, repo, label=label)
+            context.client.create_label(repository, label=label)
         except LabelsException as exc:
             click.echo(str(exc), err=True)
             failures.append(name)
