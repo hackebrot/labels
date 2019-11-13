@@ -7,7 +7,10 @@ class ContextFilter(logging.Filter):
     """Logging filter to add the click command to the record."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        ctx = click.get_current_context()
+        ctx = click.get_current_context(silent=True)
+        if not ctx:
+            return False
+
         setattr(record, "cmd", ctx.command.name)
         return True
 
