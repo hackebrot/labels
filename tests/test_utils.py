@@ -8,8 +8,10 @@ from labels import utils
     [
         "git@github.com:pytest-dev/pytest.git\n",
         "https://github.com/pytest-dev/pytest.git\n",
+        "git@github.com/pytest-dev/pytest\n",
+        "https://github.com/pytest-dev/pytest\n",
     ],
-    ids=["ssh", "https"],
+    ids=["ssh", "https", "ssh_no_git", "https_no_git"],
 )
 def test_load_repository_info(mock_repo_info):
     """Test that load_repository_info() works for both SSH and HTTPS URLs."""
