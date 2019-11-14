@@ -1,5 +1,10 @@
-# -*- coding: utf-8 -*-
+__version__ = "0.2.0.dev0"
+__title__ = "labels"
+__description__ = "Python 3 (3.6 and newer) CLI app to manage GitHub issue labels. 📝"
+__url__ = "https://github.com/hackebrot/labels"
 
-__author__: str = "Raphael Pierzina"
-__email__: str = "raphael@hackebrot.de"
-__version__: str = "0.2.0.dev0"
+__author__ = "Raphael Pierzina"
+__email__ = "raphael@hackebrot.de"
+
+__license__ = "MIT License"
+__copyright__ = "Copyright (c) 2018 Raphael Pierzina"

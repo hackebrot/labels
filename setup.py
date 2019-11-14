@@ -20,7 +20,7 @@ setuptools.setup(
         "Repository": "https://github.com/hackebrot/labels",
         "Issues": "https://github.com/hackebrot/labels/issues",
     },
-    description="Python 3 (3.6 and newer) CLI app to manage GitHub issue labels",
+    description="Python 3 (3.6 and newer) CLI app to manage GitHub issue labels. 📝",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages("src"),
