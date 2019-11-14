@@ -29,8 +29,18 @@ Once you've installed **labels** and set up the environment variables, you're
 ready to use the **labels** CLI to manage issue labels for a GitHub
 repository. The CLI comes with two commands: ``fetch`` and ``sync``.
 
-Both require you to specify the owner and the name of the GitHub repository
-using CLI options:
+Both commands require the owner and the name of the GitHub repository to
+fetch from or sync to. By default, **labels** tries to load this information
+from your local Git repository based on the URL for the `origin` remote
+repository.
+
+For example, if you run **labels** from your local clone of the [earth
+][earth_repo] repository with `origin` set to
+`git@github.com:hackebrot/earth.git`, owner will be `hackebrot` and repo will
+be `earth`. 🌍
+
+You can override each of these values manually using the following CLI
+options:
 
 ```text
 -o, --owner TEXT     GitHub owner name
@@ -165,10 +175,11 @@ project you agree to abide by its terms.
 Distributed under the terms of the MIT license, **labels** is free and open
 source software.
 
+[PyPI]: https://pypi.org/
 [code of conduct]: https://github.com/hackebrot/labels/blob/master/.github/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
+[earth_repo]: https://github.com/hackebrot/earth
 [first]: https://github.com/hackebrot/labels/labels/good%20first%20issue
-[toml]: https://github.com/toml-lang/toml
-[PyPI]: https://pypi.org/
 [pip]: https://pypi.org/project/pip/
+[toml]: https://github.com/toml-lang/toml
