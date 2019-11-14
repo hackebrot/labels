@@ -1,13 +1,13 @@
 # labels
 
-Python 3 (3.6 and newer) CLI app to manage GitHub issue labels 📝
+Python 3 (3.6 and newer) CLI app to manage GitHub issue labels. 📝
 
 ## Installation
 
 **labels** is available for download from [PyPI][PyPI] via [pip][pip]:
 
 ```text
-$ pip install labels
+pip install labels
 ```
 
 ## Authentication
@@ -19,8 +19,8 @@ labels for a public or a private repository. Then set up two environment
 variables in your terminal:
 
 ```bash
-$ export LABELS_USERNAME="<GITHUB_USERNAME>"
-$ export LABELS_TOKEN="<GITHUB_TOKEN>"
+export LABELS_USERNAME="<GITHUB_USERNAME>"
+export LABELS_TOKEN="<GITHUB_TOKEN>"
 ```
 
 ## Usage
