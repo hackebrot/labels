@@ -66,7 +66,7 @@ def fixture_mock_repo_info_error(mocker: typing.Any) -> typing.Any:
 
 @pytest.fixture(name="mock_repo_info_bad_url")
 def fixture_mock_repo_info_bad_url(mocker: typing.Any) -> typing.Any:
-    """Patch the subprocess call to git remote get-url wuth a bad URL."""
+    """Patch the subprocess call to git remote get-url with a bad URL."""
 
     return mocker.patch(
         "labels.utils.subprocess.run",
