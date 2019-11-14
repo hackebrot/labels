@@ -63,7 +63,9 @@ def default_owner(labels_context: LabelsContext) -> str:
     if labels_context.repository is None:
         repository = utils.load_repository_info()
         if repository is None:
-            raise click.BadParameter("Unable to load repository information.")
+            raise click.BadParameter(
+                "Unable to read respository owner from git remote URL."
+            )
         labels_context.repository = repository
     return labels_context.repository.owner
 
@@ -74,7 +76,9 @@ def default_repo(labels_context: LabelsContext) -> str:
     if labels_context.repository is None:
         repository = utils.load_repository_info()
         if repository is None:
-            raise click.BadParameter("Unable to load repository information.")
+            raise click.BadParameter(
+                "Unable to read repository name from git remote URL."
+            )
         labels_context.repository = repository
     return labels_context.repository.name
 
