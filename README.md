@@ -158,17 +158,14 @@ label until it processed all of the labels.
 
 ## Community
 
-Are you interested in contributing to the **labels** CLI app, or helping us
-improve our documentation, or have ideas for how to improve the project?
+Please check out the [good first issue][good first issue] label for tasks,
+that are good candidates for your first contribution to
+**labels**. Your contributions are greatly
+appreciated! Every little bit helps, and credit will always be given! 👍
 
-Read our [contributing guide][contributing] and check out the
-[good first issue][first] label for tasks, that are good candidates for your
-first contribution to **labels**. Your contributions are greatly
-appreciated! Every little bit helps, and credit will always be given!
-
-Please note that **labels** is released with a
-[Contributor Code of Conduct][code of conduct]. By participating in this
-project you agree to abide by its terms.
+Please note that **labels** is released with a [Contributor Code of
+Conduct][code of conduct]. By participating in this project you agree to
+abide by its terms.
 
 ## License
 
@@ -180,6 +177,6 @@ source software.
 [contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
 [earth_repo]: https://github.com/hackebrot/earth
-[first]: https://github.com/hackebrot/labels/labels/good%20first%20issue
+[good first issue]: https://github.com/hackebrot/labels/labels/good%20first%20issue
 [pip]: https://pypi.org/project/pip/
 [toml]: https://github.com/toml-lang/toml
