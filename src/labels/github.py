@@ -7,6 +7,14 @@ import requests
 from labels.exceptions import GitHubException
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class Repository:
+    """Represents a GitHub repository."""
+
+    owner: str
+    name: str
+
+
 def not_read_only(attr: attr.Attribute, value: typing.Any) -> bool:
     """Filter for attr that checks for a leading underscore."""
     return not attr.name.startswith("_")
@@ -48,17 +56,17 @@ class Client:
         self.session = requests.Session()
         self.session.auth = auth
 
-    def list_labels(self, owner: str, repo: str) -> typing.List[Label]:
+    def list_labels(self, repo: Repository) -> typing.List[Label]:
         """Return the list of Labels from the repository.
 
         GitHub API docs:
         https://developer.github.com/v3/issues/labels/#list-all-labels-for-this-repository
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Requesting labels for {owner}/{repo}")
+        logger.debug(f"Requesting labels for {repo.owner}/{repo.name}")
 
         response = self.session.get(
-            f"{self.base_url}/repos/{owner}/{repo}/labels",
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
         )
 
@@ -71,17 +79,17 @@ class Client:
 
         return [Label(**data) for data in response.json()]
 
-    def get_label(self, owner: str, repo: str, *, name: str) -> Label:
+    def get_label(self, repo: Repository, *, name: str) -> Label:
         """Return a single Label from the repository.
 
         GitHub API docs:
         https://developer.github.com/v3/issues/labels/#get-a-single-label
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Requesting label '{name}' for {owner}/{repo}")
+        logger.debug(f"Requesting label '{name}' for {repo.owner}/{repo.name}")
 
         response = self.session.get(
-            f"{self.base_url}/repos/{owner}/{repo}/labels/{name}",
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels/{name}",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
         )
 
@@ -94,17 +102,17 @@ class Client:
 
         return Label(**response.json())
 
-    def create_label(self, owner: str, repo: str, *, label: Label) -> Label:
+    def create_label(self, repo: Repository, *, label: Label) -> Label:
         """Create a new Label for the repository.
 
         GitHub API docs:
         https://developer.github.com/v3/issues/labels/#create-a-label
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Creating label '{label.name}' for {owner}/{repo}")
+        logger.debug(f"Creating label '{label.name}' for {repo.owner}/{repo.name}")
 
         response = self.session.post(
-            f"{self.base_url}/repos/{owner}/{repo}/labels",
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             json=label.params_dict,
         )
@@ -118,17 +126,17 @@ class Client:
 
         return Label(**response.json())
 
-    def edit_label(self, owner: str, repo: str, *, name: str, label: Label) -> Label:
+    def edit_label(self, repo: Repository, *, name: str, label: Label) -> Label:
         """Update a GitHub issue label.
 
         GitHub API docs:
         https://developer.github.com/v3/issues/labels/#update-a-label
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Editing label '{name}' for {owner}/{repo}")
+        logger.debug(f"Editing label '{name}' for {repo.owner}/{repo.name}")
 
         response = self.session.patch(
-            f"{self.base_url}/repos/{owner}/{repo}/labels/{name}",
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels/{name}",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             json=label.params_dict,
         )
@@ -142,17 +150,17 @@ class Client:
 
         return Label(**response.json())
 
-    def delete_label(self, owner: str, repo: str, *, name: str) -> None:
+    def delete_label(self, repo: Repository, *, name: str) -> None:
         """Delete a GitHub issue label.
 
         GitHub API docs:
         https://developer.github.com/v3/issues/labels/#delete-a-label
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Deleting label '{name}' for {owner}/{repo}")
+        logger.debug(f"Deleting label '{name}' for {repo.owner}/{repo.name}")
 
         response = self.session.delete(
-            f"{self.base_url}/repos/{owner}/{repo}/labels/{name}"
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels/{name}"
         )
 
         if response.status_code != 204:
