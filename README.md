@@ -12,7 +12,7 @@ pip install labels
 
 ## Authentication
 
-The labels CLI connects to the GitHub API to modify issue labels for a GitHub
+The labels CLI connects to the GitHub API to modify labels for a GitHub
 repository. Please [create your own personal API token][create token] and
 choose the correct token scope based on whether you want to manage issue
 labels for a public or a private repository. Then set up two environment
@@ -26,20 +26,18 @@ export LABELS_TOKEN="<GITHUB_TOKEN>"
 ## Usage
 
 Once you've installed **labels** and set up the environment variables, you're
-ready to use the **labels** CLI to manage issue labels for a GitHub
-repository. The CLI comes with two commands: ``fetch`` and ``sync``.
-
-Both commands require the owner and the name of the GitHub repository to
-fetch from or sync to. By default, **labels** tries to load this information
-from your local Git repository based on the URL for the `origin` remote
-repository.
+ready to use the **labels** CLI to manage labels for a GitHub repository. The
+CLI comes with two commands: ``fetch`` and ``sync``. Both commands require
+the name of the owner and the name of the GitHub repository to fetch from or
+sync to. By default, **labels** tries to load this information from your
+local Git repository based on the URL for the `origin` remote repository.
 
 For example, if you run **labels** from your local clone of the [earth
 ][earth_repo] repository with `origin` set to
-`git@github.com:hackebrot/earth.git`, owner will be `hackebrot` and repo will
+`git@github.com:hackebrot/earth.git` owner will be `hackebrot` and repo will
 be `earth`. 🌍
 
-You can override each of these values manually using the following CLI
+You can override one or both of these values manually using the following CLI
 options:
 
 ```text
@@ -49,15 +47,15 @@ options:
 
 ### Fetch
 
-When you're using **labels** for the first time, you want to fetch
+When you use **labels** for the first time, you will start by fetching
 information about the existing labels for your GitHub project. The CLI will
 then write a [TOML][toml] file to your computer with the retrieved
-information. The default filename for this file is ``labels.toml`` in your
-current working directory and can be changed by passing the
-``-f, --filename PATH`` option followed by a path.
+information. The default name for this file is ``labels.toml`` in your
+current working directory and can be changed by passing the ``-f, --filename
+PATH`` option followed by the path to where you want to write to.
 
 ```text
-$ labels fetch -o hackebrot -r pytest-emoji
+labels fetch -o hackebrot -r pytest-emoji
 ```
 
 ```toml
@@ -89,11 +87,11 @@ name = "good first issue"
 
 ### Sync
 
-Now that you have a file on your computer that represents your GitHub issue
-labels, you can edit this file and then run **labels sync** to update the
-remote repository. But first let's look into how that works... 🔍
+Now that you have a file on your computer that represents your GitHub labels,
+you can edit this file and then run **labels sync** to update the remote
+repository. But first let's look into how that works... 🔍
 
-Representation of a GitHub issue label in the written TOML file:
+Representation of a GitHub label in the written TOML file:
 
 ```toml
 [docs]
@@ -105,14 +103,16 @@ name = "docs"
 The section name (``[docs]`` in the example above) represents the name of the
 label for that repository and is identical to the ``name`` field when running
 ``labels fetch``. Do not edit the section name of existing labels yourself!
+⚠️
+
 The fields ``color``, ``description`` and ``name`` are parameters that you
 can edit with the **labels** CLI.
 
 - ``name`` - The name of the label
 - ``description`` - A short description of the label
-- ``color`` - The hexadecimal color code for the label, without the leading ``#``
+- ``color`` - The hexadecimal color code for the label without the leading ``#``
 
-You can make the following changes to issue labels for your repo:
+You can make the following changes to labels for your repo:
 
 - You can **delete** a label by removing the corresponding section from the
 labels file 🗑
@@ -133,7 +133,7 @@ Check your label changes before syncing by using the ``dryrun`` CLI option:
 Example usage:
 
 ```text
-$ labels sync -n -o hackebrot -r pytest-emoji
+labels sync -n -o hackebrot -r pytest-emoji
 ```
 
 ```text
@@ -153,8 +153,8 @@ Running ``labels sync`` without the ``dryrun`` option also updates the labels
 file, so that section names match the ``name`` parameter.
 
 If **labels** encounters any errors while sending requests to the GitHub API,
-it will print information about the failure and continue with the next
-label until it processed all of the labels.
+it will print information about the failure and continue with the next label
+until it has processed all of the labels.
 
 ## Community
 
