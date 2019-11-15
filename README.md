@@ -1,6 +1,6 @@
 # labels
 
-Python 3 (3.6 and newer) CLI app to manage GitHub issue labels. 📝
+CLI app for managing GitHub labels for Python 3.6 and newer. 📝
 
 ## Installation
 

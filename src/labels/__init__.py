@@ -1,6 +1,6 @@
 __version__ = "0.2.0.dev0"
 __title__ = "labels"
-__description__ = "Python 3 (3.6 and newer) CLI app to manage GitHub issue labels. 📝"
+__description__ = "CLI app for managing GitHub labels for Python 3.6 and newer. 📝"
 __url__ = "https://github.com/hackebrot/labels"
 
 __author__ = "Raphael Pierzina"
