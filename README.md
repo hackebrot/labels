@@ -172,7 +172,7 @@ abide by its terms.
 Distributed under the terms of the MIT license, **labels** is free and open
 source software.
 
-[PyPI]: https://pypi.org/
+[PyPI]: https://pypi.org/project/labels/
 [code of conduct]: https://github.com/hackebrot/labels/blob/master/.github/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
