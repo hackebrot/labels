@@ -1,0 +1,49 @@
+[bug]
+color = "ffeb95"
+name = "bug"
+description = "Bugs and problems with labels"
+
+["code quality"]
+color = "c792ea"
+name = "code quality"
+description = "Tasks related to linting, coding style, type checks"
+
+[dependencies]
+color = "c792ea"
+name = "dependencies"
+description = "Tasks related to managing dependencies"
+
+[discussion]
+color = "82aaff"
+name = "discussion"
+description = "Issues for discussing ideas for features"
+
+["do not merge"]
+color = "ef5350"
+name = "do not merge"
+description = "Pull requests which must not be merged"
+
+[docs]
+color = "21c7a8"
+name = "docs"
+description = "Tasks to write and update documentation"
+
+[enhancement]
+color = "82aaff"
+name = "enhancement"
+description = "New feature or enhancement for labels"
+
+["good first issue"]
+color = "7fdbca"
+name = "good first issue"
+description = "Good tasks for newcomers to labels"
+
+[misc]
+color = "ecc48d"
+name = "misc"
+description = "Tasks that don't fit any of the other categories"
+
+[project]
+color = "d6deeb"
+name = "project"
+description = "Tasks related to managing this project"
