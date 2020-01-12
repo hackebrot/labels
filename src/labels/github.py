@@ -81,7 +81,7 @@ class Client:
                     headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             )
             json.extend(response.json())
-            link_header = response.headers.get('Link')
+            link_header = response.headers.get('Link', '')
             next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
 
         if response.status_code != 200:
