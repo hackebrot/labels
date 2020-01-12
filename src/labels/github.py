@@ -71,7 +71,7 @@ class Client:
         )
         json = response.json()
 
-        link_header = response.headers.get('Link', [])
+        link_header = response.headers.get('Link', '')
         next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
         while next_page:
             l, _ = next_page[0].split(';')
