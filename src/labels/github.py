@@ -69,6 +69,20 @@ class Client:
             f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
         )
+        json = response.json()
+
+        link_header = response.headers.get('Link', [])
+        next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
+        while next_page:
+            l, _ = next_page[0].split(';')
+            logger.debug(f"Requesting {l.split('?')[1]}")
+            response = self.session.get(
+                    l[1:-1],
+                    headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+            )
+            json.extend(response.json())
+            link_header = response.headers.get('Link')
+            next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
 
         if response.status_code != 200:
             raise GitHubException(
@@ -77,7 +91,7 @@ class Client:
                 f"{response.reason}"
             )
 
-        return [Label(**data) for data in response.json()]
+        return [Label(**data) for data in json]
 
     def get_label(self, repo: Repository, *, name: str) -> Label:
         """Return a single Label from the repository.
