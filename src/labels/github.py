@@ -71,18 +71,15 @@ class Client:
         )
         json = response.json()
 
-        link_header = response.headers.get('Link', [])
-        next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
+        next_page = response.links.get('next', None)
         while next_page:
-            l, _ = next_page[0].split(';')
-            logger.debug(f"Requesting {l.split('?')[1]}")
+            logger.debug(f"Requesting {next_page}")
             response = self.session.get(
-                    l[1:-1],
+                    next_page['url'],
                     headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             )
             json.extend(response.json())
-            link_header = response.headers.get('Link', '')
-            next_page = [l for l in link_header.split(',') if 'rel="next"' in l]
+            next_page = response.links.get('next', None)
 
         if response.status_code != 200:
             raise GitHubException(
