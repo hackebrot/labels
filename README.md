@@ -6,7 +6,7 @@ CLI app for managing GitHub labels for Python 3.6 and newer. 📝
 
 **labels** is available for download from [PyPI][PyPI] via [pip][pip]:
 
-```bash
+```text
 pip install labels
 ```
 
@@ -62,7 +62,7 @@ information. The default name for this file is ``labels.toml`` in your
 current working directory and can be changed by passing the ``-f, --filename
 PATH`` option followed by the path to where you want to write to.
 
-```bash
+```text
 labels fetch -o hackebrot -r pytest-emoji
 ```
 
