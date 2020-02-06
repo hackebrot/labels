@@ -69,6 +69,14 @@ class Client:
             f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels",
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
         )
+
+        if response.status_code != 200:
+            raise GitHubException(
+                f"Error retrieving labels: "
+                f"{response.status_code} - "
+                f"{response.reason}"
+            )
+
         json = response.json()
 
         next_page = response.links.get('next', None)
@@ -78,15 +86,16 @@ class Client:
                     next_page['url'],
                     headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             )
+
+            if response.status_code != 200:
+                raise GitHubException(
+                    f"Error retrieving next page of labels: "
+                    f"{response.status_code} - "
+                    f"{response.reason}"
+                )
+
             json.extend(response.json())
             next_page = response.links.get('next', None)
-
-        if response.status_code != 200:
-            raise GitHubException(
-                f"Error retrieving labels: "
-                f"{response.status_code} - "
-                f"{response.reason}"
-            )
 
         return [Label(**data) for data in json]
 
