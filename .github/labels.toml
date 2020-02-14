@@ -14,7 +14,7 @@ name = "dependencies"
 description = "Tasks related to managing dependencies"
 
 [discussion]
-color = "82aaff"
+color = "ffeb95"
 name = "discussion"
 description = "Issues for discussing ideas for features"
 
