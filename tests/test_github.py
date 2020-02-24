@@ -17,7 +17,7 @@ def fixture_repo(repo_owner: str, repo_name: str) -> Repository:
     return Repository(repo_owner, repo_name)
 
 
-@pytest.mark.usefixtures("mock_list_labels")
+@pytest.mark.usefixtures("mock_paged_list_labels")
 def test_list_labels(client: Client, repo: Repository) -> None:
     """Test that list_labels() requests the labels for the specified repo and
     returns a list of Label instances.
