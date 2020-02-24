@@ -177,16 +177,16 @@ class Client:
         - The old label will be deleted while processing labels to delete.
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Requesting issues for label {old_label} in {repo.owner}/{repo.name}")
+        logger.debug(f"Requesting issues for label {old_label} in {repo.owner}/{repo.name}")  # noqa: E501
 
         response = self.session.get(
-                f"{self.base_url}/search/issues?q=label:{old_label}+repo:{repo.owner}/{repo.name}",
+                f"{self.base_url}/search/issues?q=label:{old_label}+repo:{repo.owner}/{repo.name}",  # noqa: E501
             headers={"Accept": "application/vnd.github.symmetra-preview+json"},
         )
 
         if response.status_code != 200:
             raise GitHubException(
-                f"Error retrieving issues for label {old_label} in {repo.owner}/{repo.name}: "
+                f"Error retrieving issues for label {old_label} in {repo.owner}/{repo.name}: "  # noqa: E501
                 f"{response.status_code} - "
                 f"{response.reason}"
             )
@@ -213,13 +213,13 @@ class Client:
 
         for issue in json['items']:
             response = self.session.get(
-                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",
+                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",  # noqa: E501
                 headers={"Accept": "application/vnd.github.symmetra-preview+json"},
             )
 
             if response.status_code != 200:
                 raise GitHubException(
-                    f"Error retrieving labels for {repo.owner}/{repo.name}/issue/{issue['number']}: "
+                    f"Error retrieving labels for {repo.owner}/{repo.name}/issue/{issue['number']}: "  # noqa: E501
                     f"{response.status_code} - "
                     f"{response.reason}"
                 )
@@ -227,20 +227,18 @@ class Client:
             labels = [l['name'] for l in response.json()]
 
             if new_label not in labels:
-                breakpoint()
                 response = self.session.post(
-                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",
+                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",  # noqa: E501
                     headers={"Accept": "application/vnd.github.symmetra-preview+json"},
                     json={'labels': [f"{new_label}"]},
                 )
                 if response.status_code != 200:
                     raise GitHubException(
-                        f"Error adding '{new_label}' for issue {repo.owner}/{repo.name}/issues/{issue['number']}: "
+                        f"Error adding '{new_label}' for issue {repo.owner}/{repo.name}/issues/{issue['number']}: "  # noqa: E501
                         f"{response.status_code} - "
                         f"{response.reason}"
                 )
-                logger.debug(f"Added label '{new_label}' to {repo.owner}/{repo.name}/issue/{issue['number']}")
-
+                logger.debug(f"Added label '{new_label}' to {repo.owner}/{repo.name}/issue/{issue['number']}")  # noqa: E501
 
     def delete_label(self, repo: Repository, *, name: str) -> None:
         """Delete a GitHub issue label.
