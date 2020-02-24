@@ -126,6 +126,8 @@ You can make the following changes to labels for your repo:
 labels file 🗑
 - You can **edit** a label by changing the value for one or more parameters for
 that label 🎨
+- You can **merge** one label to another by setting the ``name`` of a label to
+that of an existing label. The merged label will be deleted.
 - You can **create** a new label by adding a new section with your desired
 parameters 📝
 
@@ -145,15 +147,18 @@ labels sync -n -o hackebrot -r pytest-emoji
 ```
 
 ```text
-This would delete the following labels:
-  - dependencies
+This would merge the following labels:
+  - dependencies to dependency
 This would update the following labels:
   - bug
   - good first issue
+This would delete the following labels:
+  - dependencies
 This would create the following labels:
   - duplicate
 This would NOT modify the following labels:
   - code quality
+  - dependency
   - docs
 ```
 
