@@ -161,6 +161,31 @@ def fixture_mock_list_labels(
         yield
 
 
+@pytest.fixture(name="mock_paged_list_labels")
+def fixture_mock_paged_list_labels(
+    base_url: str, repo_owner: str, repo_name: str, response_list_labels: ResponseLabels
+) -> None:
+    """Mock requests for list labels."""
+    with responses.RequestsMock() as rsps:
+        rsps.add(
+            responses.GET,
+            f"{base_url}/repos/{repo_owner}/{repo_name}/labels",
+            json=response_list_labels[:2],
+            status=200,
+            content_type="application/json",
+            headers={'link': f'<{base_url}/repos/{repo_owner}/{repo_name}/labels?page=2&per_page=2>; rel="next", <{base_url}/repos/{repo_owner}/{repo_name}/labels?page=2&per_page=2>; rel="last"'}  # noqa: E501
+        )
+        rsps.add(
+            responses.GET,
+            f"{base_url}/repos/{repo_owner}/{repo_name}/labels",
+            json=response_list_labels[2:],
+            status=200,
+            content_type="application/json",
+            headers={'link': f'<{base_url}/repos/{repo_owner}/{repo_name}/labels?page=1&per_page=2>; rel="prev", <{base_url}/repos/{repo_owner}/{repo_name}/labels?page=1&per_page=2>; rel="first"'}  # noqa: E501
+        )
+        yield
+
+
 @pytest.fixture(name="mock_get_label")
 def fixture_mock_get_label(
     base_url: str, repo_owner: str, repo_name: str, response_get_bug: ResponseLabel
