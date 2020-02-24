@@ -170,6 +170,78 @@ class Client:
 
         return Label(**response.json())
 
+    def merge_label(self, repo: Repository, *, old_label: str, new_label: str) -> None:
+        """Merge a GitHub issue label to an existing label.
+
+        - Add the target label to all issues with the old label.
+        - The old label will be deleted while processing labels to delete.
+        """
+        logger = logging.getLogger("labels")
+        logger.debug(f"Requesting issues for label {old_label} in {repo.owner}/{repo.name}")
+
+        response = self.session.get(
+                f"{self.base_url}/search/issues?q=label:{old_label}+repo:{repo.owner}/{repo.name}",
+            headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+        )
+
+        if response.status_code != 200:
+            raise GitHubException(
+                f"Error retrieving issues for label {old_label} in {repo.owner}/{repo.name}: "
+                f"{response.status_code} - "
+                f"{response.reason}"
+            )
+
+        json = response.json()
+
+        next_page = response.links.get('next', None)
+        while next_page:
+            logger.debug(f"Requesting {next_page}")
+            response = self.session.get(
+                    next_page['url'],
+                    headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+            )
+
+            if response.status_code != 200:
+                raise GitHubException(
+                    f"Error retrieving next page of issues for label {old_label}: "
+                    f"{response.status_code} - "
+                    f"{response.reason}"
+                )
+
+            json.extend(response.json())
+            next_page = response.links.get('next', None)
+
+        for issue in json['items']:
+            response = self.session.get(
+                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",
+                headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+            )
+
+            if response.status_code != 200:
+                raise GitHubException(
+                    f"Error retrieving labels for {repo.owner}/{repo.name}/issue/{issue['number']}: "
+                    f"{response.status_code} - "
+                    f"{response.reason}"
+                )
+
+            labels = [l['name'] for l in response.json()]
+
+            if new_label not in labels:
+                breakpoint()
+                response = self.session.post(
+                    f"{self.base_url}/repos/{repo.owner}/{repo.name}/issues/{issue['number']}/labels",
+                    headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+                    json={'labels': [f"{new_label}"]},
+                )
+                if response.status_code != 200:
+                    raise GitHubException(
+                        f"Error adding '{new_label}' for issue {repo.owner}/{repo.name}/issues/{issue['number']}: "
+                        f"{response.status_code} - "
+                        f"{response.reason}"
+                )
+                logger.debug(f"Added label '{new_label}' to {repo.owner}/{repo.name}/issue/{issue['number']}")
+
+
     def delete_label(self, repo: Repository, *, name: str) -> None:
         """Delete a GitHub issue label.
 
