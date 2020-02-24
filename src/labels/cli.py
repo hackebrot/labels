@@ -204,7 +204,7 @@ def sync_cmd(
                     f'parameter: "{local_label.name}"',
                     err=True,
                 )
-                sys.exit(1)
+                labels_to_ignore[remote_name] = local_label
 
     for remote_name, remote_label in remote_labels.items():
         if remote_name in labels_to_update:
@@ -285,7 +285,7 @@ def dryrun_echo(
         click.echo(f"This would merge the following labels:")
         for name in labels_to_merge:
             click.echo(f"""\
-- {', '.join([' to '.join((old, new)) for old, new in labels_to_merge.items()])}""")
+  - {', '.join([f"'{old}' to '{new}'" for old, new in labels_to_merge.items()])}""")
 
     if labels_to_update:
         click.echo(f"This would update the following labels:")
