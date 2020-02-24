@@ -157,7 +157,7 @@ class Client:
         - The old label will be deleted while processing labels to delete.
         """
         logger = logging.getLogger("labels")
-        logger.debug(f"Requesting issues for label {old_label} in {repo.owner}/{repo.name}")  # noqa: E501
+        logger.debug(f"Merging label '{old_label}' to '{new_label}' in {repo.owner}/{repo.name}")  # noqa: E501
 
         response = self.session.get(
                 f"{self.base_url}/search/issues?q=label:{old_label}+repo:{repo.owner}/{repo.name}",  # noqa: E501
