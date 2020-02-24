@@ -194,10 +194,10 @@ def test_sync_dryrun(
     assert result.exit_code == 0
 
     output = (
-        "This would delete the following labels:\n"
-        "  - infra\n"
         "This would update the following labels:\n"
         "  - bug\n"
+        "This would delete the following labels:\n"
+        "  - infra\n"
         "This would create the following labels:\n"
         "  - dependencies\n"
         "This would NOT modify the following labels:\n"
