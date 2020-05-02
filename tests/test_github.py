@@ -17,7 +17,7 @@ def fixture_repo(repo_owner: str, repo_name: str) -> Repository:
     return Repository(repo_owner, repo_name)
 
 
-@pytest.mark.usefixtures("mock_paged_list_labels")
+@pytest.mark.usefixtures("mock_list_labels")
 def test_list_labels(client: Client, repo: Repository) -> None:
     """Test that list_labels() requests the labels for the specified repo and
     returns a list of Label instances.
@@ -39,6 +39,32 @@ def test_list_labels(client: Client, repo: Repository) -> None:
             "name": "bug",
             "description": "Bugs and problems with cookiecutter",
             "color": "ea707a",
+        },
+    ]
+
+    assert [l.params_dict for l in labels] == expected_params
+
+
+@pytest.mark.usefixtures("mock_list_labels_paginated")
+def test_list_labels_pagination(client: Client, repo: Repository) -> None:
+    """Test that list_labels() supports pagination."""
+    labels = client.list_labels(repo)
+
+    expected_params = [
+        {
+            "name": "bug",
+            "description": "Bugs and problems with cookiecutter",
+            "color": "ea707a",
+        },
+        {
+            "name": "docs",
+            "description": "Tasks to write and update documentation",
+            "color": "2abf88",
+        },
+        {
+            "name": "infra",
+            "description": "Tasks related to Docker/CI etc.",
+            "color": "f9d03b",
         },
     ]
 
