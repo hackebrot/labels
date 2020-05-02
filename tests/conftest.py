@@ -34,6 +34,12 @@ def fixture_repo_name() -> str:
     return "turtle"
 
 
+@pytest.fixture(name="repo_id", scope="session")
+def fixture_repo_id() -> int:
+    """Return a repository ID."""
+    return 102909380
+
+
 @attr.s(auto_attribs=True, frozen=True, kw_only=True)
 class FakeProc:
     """Fake for a CompletedProcess instance."""
@@ -161,28 +167,48 @@ def fixture_mock_list_labels(
         yield
 
 
-@pytest.fixture(name="mock_paged_list_labels")
-def fixture_mock_paged_list_labels(
-    base_url: str, repo_owner: str, repo_name: str, response_list_labels: ResponseLabels
-) -> None:
-    """Mock requests for list labels."""
+@pytest.fixture(name="mock_list_labels_paginated")
+def fixture_mock_list_labels_paginated(
+    base_url: str,
+    repo_owner: str,
+    repo_name: str,
+    repo_id: int,
+    response_get_infra: ResponseLabel,
+    response_get_docs: ResponseLabel,
+    response_get_bug: ResponseLabel,
+):
+    """Mock requests for list labels with pagination."""
+
     with responses.RequestsMock() as rsps:
+
         rsps.add(
             responses.GET,
             f"{base_url}/repos/{repo_owner}/{repo_name}/labels",
-            json=response_list_labels[:2],
+            json=[response_get_bug, response_get_docs],
             status=200,
             content_type="application/json",
-            headers={'link': f'<{base_url}/repos/{repo_owner}/{repo_name}/labels?page=2&per_page=2>; rel="next", <{base_url}/repos/{repo_owner}/{repo_name}/labels?page=2&per_page=2>; rel="last"'}  # noqa: E501
+            headers={
+                "Link": (
+                    f'<{base_url}/repositories/{repo_id}/labels?page=2>; rel="next", '
+                    f'<{base_url}/repositories/{repo_id}/labels?page=2>; rel="last"'
+                )
+            },
         )
+
         rsps.add(
             responses.GET,
-            f"{base_url}/repos/{repo_owner}/{repo_name}/labels",
-            json=response_list_labels[2:],
+            f"{base_url}/repositories/{repo_id}/labels?page=2",
+            json=[response_get_infra],
             status=200,
             content_type="application/json",
-            headers={'link': f'<{base_url}/repos/{repo_owner}/{repo_name}/labels?page=1&per_page=2>; rel="prev", <{base_url}/repos/{repo_owner}/{repo_name}/labels?page=1&per_page=2>; rel="first"'}  # noqa: E501
+            headers={
+                "Link": (
+                    f'<{base_url}/repositories/{repo_id}/labels?page=1>; rel="prev", '
+                    f'<{base_url}/repositories/{repo_id}/labels?page=1>; rel="first"'
+                )
+            },
         )
+
         yield
 
 
