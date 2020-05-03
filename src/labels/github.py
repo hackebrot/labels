@@ -1,5 +1,5 @@
-import typing
 import logging
+from typing import Any, Dict, List, Optional, Tuple
 
 import attr
 import requests
@@ -15,7 +15,7 @@ class Repository:
     name: str
 
 
-def not_read_only(attr: attr.Attribute, value: typing.Any) -> bool:
+def not_read_only(attr: attr.Attribute, value: Any) -> bool:
     """Filter for attr that checks for a leading underscore."""
     return not attr.name.startswith("_")
 
@@ -35,12 +35,12 @@ class Label:
     _url: str = ""
 
     @property
-    def params_dict(self) -> typing.Dict[str, typing.Any]:
+    def params_dict(self) -> Dict[str, Any]:
         """Return label parameters as a dict."""
         return attr.asdict(self, recurse=True, filter=not_read_only)
 
     @property
-    def params_tuple(self) -> typing.Tuple[typing.Any, ...]:
+    def params_tuple(self) -> Tuple[Any, ...]:
         """Return label parameters as a tuple."""
         return attr.astuple(self, recurse=True, filter=not_read_only)
 
@@ -56,7 +56,7 @@ class Client:
         self.session = requests.Session()
         self.session.auth = auth
 
-    def list_labels(self, repo: Repository) -> typing.List[Label]:
+    def list_labels(self, repo: Repository) -> List[Label]:
         """Return the list of Labels from the repository.
 
         GitHub API docs:
@@ -65,9 +65,10 @@ class Client:
         logger = logging.getLogger("labels")
         logger.debug(f"Requesting labels for {repo.owner}/{repo.name}")
 
+        headers = {"Accept": "application/vnd.github.symmetra-preview+json"}
+
         response = self.session.get(
-            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels",
-            headers={"Accept": "application/vnd.github.symmetra-preview+json"},
+            f"{self.base_url}/repos/{repo.owner}/{repo.name}/labels", headers=headers
         )
 
         if response.status_code != 200:
@@ -77,7 +78,27 @@ class Client:
                 f"{response.reason}"
             )
 
-        return [Label(**data) for data in response.json()]
+        repo_labels: List[Dict] = response.json()
+
+        next_page: Optional[Dict] = response.links.get("next", None)
+
+        while next_page is not None:
+
+            logger.debug(f"Requesting next page of labels")
+            response = self.session.get(next_page["url"], headers=headers)
+
+            if response.status_code != 200:
+                raise GitHubException(
+                    f"Error retrieving next page of labels: "
+                    f"{response.status_code} - "
+                    f"{response.reason}"
+                )
+
+            repo_labels.extend(response.json())
+
+            next_page = response.links.get("next", None)
+
+        return [Label(**label) for label in repo_labels]
 
     def get_label(self, repo: Repository, *, name: str) -> Label:
         """Return a single Label from the repository.

@@ -1,4 +1,4 @@
-import typing
+from typing import Any, Dict, Generator, List
 
 import attr
 import pytest
@@ -6,8 +6,8 @@ import responses
 
 from labels.github import Label
 
-ResponseLabel = typing.Dict[str, typing.Any]
-ResponseLabels = typing.List[ResponseLabel]
+ResponseLabel = Dict[str, Any]
+ResponseLabels = List[ResponseLabel]
 
 
 @pytest.fixture(name="username", scope="session")
@@ -34,6 +34,12 @@ def fixture_repo_name() -> str:
     return "turtle"
 
 
+@pytest.fixture(name="repo_id", scope="session")
+def fixture_repo_id() -> int:
+    """Return a repository ID."""
+    return 102909380
+
+
 @attr.s(auto_attribs=True, frozen=True, kw_only=True)
 class FakeProc:
     """Fake for a CompletedProcess instance."""
@@ -43,7 +49,7 @@ class FakeProc:
 
 
 @pytest.fixture(name="mock_repo_info")
-def fixture_mock_repo_info(mocker: typing.Any, remote_url: str) -> typing.Any:
+def fixture_mock_repo_info(mocker: Any, remote_url: str) -> Any:
     """Patch the subprocess call to git remote get-url."""
 
     return mocker.patch(
@@ -54,7 +60,7 @@ def fixture_mock_repo_info(mocker: typing.Any, remote_url: str) -> typing.Any:
 
 
 @pytest.fixture(name="mock_repo_info_error")
-def fixture_mock_repo_info_error(mocker: typing.Any) -> typing.Any:
+def fixture_mock_repo_info_error(mocker: Any) -> Any:
     """Patch the subprocess call to git remote get-url with an error."""
 
     return mocker.patch(
@@ -65,7 +71,7 @@ def fixture_mock_repo_info_error(mocker: typing.Any) -> typing.Any:
 
 
 @pytest.fixture(name="mock_repo_info_bad_url")
-def fixture_mock_repo_info_bad_url(mocker: typing.Any) -> typing.Any:
+def fixture_mock_repo_info_bad_url(mocker: Any) -> Any:
     """Patch the subprocess call to git remote get-url with a bad URL."""
 
     return mocker.patch(
@@ -148,7 +154,7 @@ def fixture_response_list_labels(
 @pytest.fixture(name="mock_list_labels")
 def fixture_mock_list_labels(
     base_url: str, repo_owner: str, repo_name: str, response_list_labels: ResponseLabels
-) -> None:
+) -> Generator:
     """Mock requests for list labels."""
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -161,10 +167,55 @@ def fixture_mock_list_labels(
         yield
 
 
+@pytest.fixture(name="mock_list_labels_paginated")
+def fixture_mock_list_labels_paginated(
+    base_url: str,
+    repo_owner: str,
+    repo_name: str,
+    repo_id: int,
+    response_get_infra: ResponseLabel,
+    response_get_docs: ResponseLabel,
+    response_get_bug: ResponseLabel,
+) -> Generator:
+    """Mock requests for list labels with pagination."""
+
+    with responses.RequestsMock() as rsps:
+
+        rsps.add(
+            responses.GET,
+            f"{base_url}/repos/{repo_owner}/{repo_name}/labels",
+            json=[response_get_bug, response_get_docs],
+            status=200,
+            content_type="application/json",
+            headers={
+                "Link": (
+                    f'<{base_url}/repositories/{repo_id}/labels?page=2>; rel="next", '
+                    f'<{base_url}/repositories/{repo_id}/labels?page=2>; rel="last"'
+                )
+            },
+        )
+
+        rsps.add(
+            responses.GET,
+            f"{base_url}/repositories/{repo_id}/labels?page=2",
+            json=[response_get_infra],
+            status=200,
+            content_type="application/json",
+            headers={
+                "Link": (
+                    f'<{base_url}/repositories/{repo_id}/labels?page=1>; rel="prev", '
+                    f'<{base_url}/repositories/{repo_id}/labels?page=1>; rel="first"'
+                )
+            },
+        )
+
+        yield
+
+
 @pytest.fixture(name="mock_get_label")
 def fixture_mock_get_label(
     base_url: str, repo_owner: str, repo_name: str, response_get_bug: ResponseLabel
-) -> None:
+) -> Generator:
     """Mock requests for get label."""
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -180,7 +231,7 @@ def fixture_mock_get_label(
 @pytest.fixture(name="mock_edit_label")
 def fixture_mock_edit_label(
     base_url: str, repo_owner: str, repo_name: str, response_get_bug: ResponseLabel
-) -> None:
+) -> Generator:
     """Mock requests for edit label."""
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -208,7 +259,7 @@ def fixture_mock_create_label(
     repo_name: str,
     label: Label,
     response_get_bug: ResponseLabel,
-) -> None:
+) -> Generator:
     """Mock requests for create label."""
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -222,7 +273,9 @@ def fixture_mock_create_label(
 
 
 @pytest.fixture(name="mock_delete_label")
-def fixture_mock_delete_label(base_url: str, repo_owner: str, repo_name: str) -> None:
+def fixture_mock_delete_label(
+    base_url: str, repo_owner: str, repo_name: str
+) -> Generator:
     """Mock requests for delete label."""
     with responses.RequestsMock() as rsps:
         rsps.add(
@@ -236,7 +289,7 @@ def fixture_mock_delete_label(base_url: str, repo_owner: str, repo_name: str) ->
 @pytest.fixture(name="mock_sync")
 def fixture_mock_sync(
     base_url: str, repo_owner: str, repo_name: str, response_list_labels: ResponseLabels
-) -> None:
+) -> Generator:
     with responses.RequestsMock() as rsps:
         # Response mock for when sync requests the existing remote labels
         rsps.add(
@@ -292,7 +345,7 @@ def fixture_mock_sync(
 
 
 @pytest.fixture(name="labels")
-def fixture_labels() -> typing.List[Label]:
+def fixture_labels() -> List[Label]:
     """Return a list of Label instances."""
     return [
         Label(
@@ -334,7 +387,7 @@ def fixture_labels() -> typing.List[Label]:
 
 
 @pytest.fixture(name="labels_file_dict")
-def fixture_labels_file_content() -> typing.Dict[str, typing.Any]:
+def fixture_labels_file_content() -> Dict[str, Any]:
     """Return a mapping from label names to dicts representing Labels."""
     return {
         "bug": {
@@ -386,7 +439,7 @@ def fixture_labels_file_content() -> typing.Dict[str, typing.Any]:
 
 
 @pytest.fixture(name="labels_file_write")
-def fixture_labels_file_write(tmpdir: typing.Any) -> str:
+def fixture_labels_file_write(tmpdir: Any) -> str:
     """Return a filepath to a temporary file."""
     labels_file = tmpdir.join("labels.toml")
     return str(labels_file)
@@ -399,6 +452,6 @@ def fixture_labels_file_load() -> str:
 
 
 @pytest.fixture(name="labels_file_sync")
-def fixture_labels_file_sync(tmpdir: typing.Any) -> str:
+def fixture_labels_file_sync(tmpdir: Any) -> str:
     """Return a filepath to an existing labels file for the sync test."""
     return "tests/sync.toml"
