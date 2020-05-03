@@ -22,4 +22,4 @@ abide by its terms.
 [new pull request]: https://github.com/hackebrot/labels/compare
 [pull requests]: https://github.com/hackebrot/labels/pulls
 [code of conduct]: /.github/CODE_OF_CONDUCT.md
-[community]: /.github/COMMUNITY.md
+[community]: /COMMUNITY.md
