@@ -9,7 +9,7 @@ def read(*args: str) -> str:
 
 setuptools.setup(
     name="labels",
-    version="0.3.0.dev0",
+    version="20.1.0.dev0",
     author="Raphael Pierzina",
     author_email="raphael@hackebrot.de",
     maintainer="Raphael Pierzina",
