@@ -10,6 +10,8 @@ CLI app for managing GitHub labels for Python 3.6 and newer. 📝
 pip install labels
 ```
 
+Versions follow [Calendar Versioning][calver] using a `YY.MINOR.MICRO` scheme. 🗓
+
 ## Authentication
 
 The labels CLI connects to the GitHub API to modify labels for a GitHub
@@ -173,6 +175,7 @@ Distributed under the terms of the MIT license, **labels** is free and open
 source software.
 
 [PyPI]: https://pypi.org/project/labels/
+[calver]: https://calver.org
 [code of conduct]: https://github.com/hackebrot/labels/blob/master/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
