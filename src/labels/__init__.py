@@ -1,4 +1,4 @@
-__version__ = "20.1.0.dev0"
+__version__ = "20.1.0"
 __title__ = "labels"
 __description__ = "CLI app for managing GitHub labels for Python 3.6 and newer. 📝"
 __url__ = "https://github.com/hackebrot/labels"

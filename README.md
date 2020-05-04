@@ -105,7 +105,6 @@ name = "docs"
 The section name (``[docs]`` in the example above) represents the name of the
 label for that repository and is identical to the ``name`` field when running
 ``labels fetch``. Do not edit the section name of existing labels yourself!
-⚠️
 
 The fields ``color``, ``description`` and ``name`` are parameters that you
 can edit with the **labels** CLI.
