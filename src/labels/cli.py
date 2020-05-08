@@ -10,7 +10,7 @@ from requests.auth import HTTPBasicAuth
 from labels import __version__, utils
 from labels.exceptions import LabelsException
 from labels.github import Client, Label, Repository
-from labels.io import write_labels, read_labels
+from labels.io import read_labels, write_labels
 from labels.log import create_logger
 
 Labels_Dict = typing.Dict[str, Label]

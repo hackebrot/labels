@@ -4,9 +4,7 @@ import shlex
 import subprocess
 import typing
 
-
 from labels.github import Repository
-
 
 REMOTE_REGEX = re.compile(
     r"^(https|git)(:\/\/|@)github\.com[\/:](?P<owner>[^\/:]+)\/(?P<name>.*?)(\.git)?$"
