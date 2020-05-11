@@ -164,8 +164,9 @@ def sync_cmd(
     On success this will also update the local labels file, so that section
     names match the `name` parameter.
     """
-    labels_to_delete = {}
+    labels_to_merge = {}
     labels_to_update = {}
+    labels_to_delete = {}
     labels_to_create = {}
     labels_to_ignore = {}
 
@@ -187,7 +188,12 @@ def sync_cmd(
             if local_label.params_dict == remote_label.params_dict:
                 labels_to_ignore[remote_name] = local_label
             else:
-                labels_to_update[remote_name] = local_label
+                if ((remote_name != local_label.name)
+                        and (local_label.name in remote_labels)):
+                    # There is already a label with this name
+                    labels_to_merge[remote_name] = local_label.name
+                else:
+                    labels_to_update[remote_name] = local_label
         else:
             if remote_name == local_label.name:
                 labels_to_create[local_label.name] = local_label
@@ -198,7 +204,7 @@ def sync_cmd(
                     f'parameter: "{local_label.name}"',
                     err=True,
                 )
-                sys.exit(1)
+                labels_to_ignore[remote_name] = local_label
 
     for remote_name, remote_label in remote_labels.items():
         if remote_name in labels_to_update:
@@ -212,22 +218,36 @@ def sync_cmd(
     if dryrun:
         # Do not modify remote labels, but only print info
         dryrun_echo(
-            labels_to_delete, labels_to_update, labels_to_create, labels_to_ignore
+            labels_to_merge,
+            labels_to_update,
+            labels_to_delete,
+            labels_to_create,
+            labels_to_ignore
         )
-        sys.exit(0)
+        # sys.exit(0)
+        return
 
     failures = []
 
-    for name in labels_to_delete.keys():
+    # Merge has to occur before update and delete
+    for old_label, new_label in labels_to_merge.items():
         try:
-            context.client.delete_label(repository, name=name)
+            context.client.merge_label(
+                    repository, old_label=old_label, new_label=new_label)
         except LabelsException as exc:
             click.echo(str(exc), err=True)
-            failures.append(name)
+            failures.append(old_label)
 
     for name, label in labels_to_update.items():
         try:
             context.client.edit_label(repository, name=name, label=label)
+        except LabelsException as exc:
+            click.echo(str(exc), err=True)
+            failures.append(name)
+
+    for name in labels_to_delete.keys():
+        try:
+            context.client.delete_label(repository, name=name)
         except LabelsException as exc:
             click.echo(str(exc), err=True)
             failures.append(name)
@@ -253,21 +273,28 @@ def sync_cmd(
 
 
 def dryrun_echo(
-    labels_to_delete: Labels_Dict,
+    labels_to_merge: dict,
     labels_to_update: Labels_Dict,
+    labels_to_delete: Labels_Dict,
     labels_to_create: Labels_Dict,
     labels_to_ignore: Labels_Dict,
 ) -> None:
     """Print information about how labels would be updated on sync."""
 
-    if labels_to_delete:
-        click.echo(f"This would delete the following labels:")
-        for name in labels_to_delete:
-            click.echo(f"  - {name}")
+    if labels_to_merge:
+        click.echo(f"This would merge the following labels:")
+        for name in labels_to_merge:
+            click.echo(f"""\
+  - {', '.join([f"'{old}' to '{new}'" for old, new in labels_to_merge.items()])}""")
 
     if labels_to_update:
         click.echo(f"This would update the following labels:")
         for name in labels_to_update:
+            click.echo(f"  - {name}")
+
+    if labels_to_delete:
+        click.echo(f"This would delete the following labels:")
+        for name in labels_to_delete:
             click.echo(f"  - {name}")
 
     if labels_to_create:
