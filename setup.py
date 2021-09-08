@@ -28,7 +28,7 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.6",
-    install_requires=["click", "requests", "pytoml", "attrs"],
+    install_requires=["click", "requests", "attrs", "tomli>=1.2.1", "tomli-w>=0.3.0"],
     entry_points={"console_scripts": ["labels = labels.cli:labels"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
