@@ -7,17 +7,27 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: ["py36", "py37", "flake8", "mypy"]
+        environment:
+          - "py36"
+          - "py37"
+          - "py38"
+          - "py39"
+          - "flake8"
+          - "mypy"
 
         include:
           - environment: "py36"
             python: "3.6"
           - environment: "py37"
             python: "3.7"
+          - environment: "py38"
+            python: "3.8"
+          - environment: "py39"
+            python: "3.9"
           - environment: "flake8"
-            python: "3.7"
+            python: "3.9"
           - environment: "mypy"
-            python: "3.7"
+            python: "3.9"
 
     container:
       image: python:${{ matrix.python }}
