@@ -175,8 +175,8 @@ source software.
 
 [PyPI]: https://pypi.org/project/labels/
 [calver]: https://calver.org
-[code of conduct]: https://github.com/hackebrot/labels/blob/master/CODE_OF_CONDUCT.md
-[contributing]: https://github.com/hackebrot/labels/blob/master/.github/CONTRIBUTING.md
+[code of conduct]: https://github.com/hackebrot/labels/blob/main/CODE_OF_CONDUCT.md
+[contributing]: https://github.com/hackebrot/labels/blob/main/.github/CONTRIBUTING.md
 [create token]: https://blog.github.com/2013-05-16-personal-api-tokens/
 [earth_repo]: https://github.com/hackebrot/earth
 [good first issue]: https://github.com/hackebrot/labels/labels/good%20first%20issue

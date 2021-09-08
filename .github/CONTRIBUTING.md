@@ -17,7 +17,7 @@ Please note that **labels** is released with a [Contributor Code of
 Conduct][code of conduct]. By participating in this project you agree to
 abide by its terms.
 
-[readme]: https://github.com/hackebrot/labels/blob/master/README.md
+[readme]: https://github.com/hackebrot/labels/blob/main/README.md
 [new issue]: https://github.com/hackebrot/labels/issues/new/choose
 [new pull request]: https://github.com/hackebrot/labels/compare
 [pull requests]: https://github.com/hackebrot/labels/pulls
