@@ -174,7 +174,9 @@ def sync_cmd(
     repository = Repository(owner, repo)
 
     try:
-        remote_labels = {l.name: l for l in context.client.list_labels(repository)}
+        remote_labels = {
+            label.name: label for label in context.client.list_labels(repository)
+        }
     except LabelsException as exc:
         click.echo(str(exc), err=True)
         sys.exit(1)

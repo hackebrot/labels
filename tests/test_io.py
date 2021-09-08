@@ -24,7 +24,7 @@ def test_load_labels(labels_file_load: str, labels: typing.List[Label]) -> None:
     """Test that read_lables() correctly reads the TOML file and returns a
     mapping of names to Label instances.
     """
-    want = {l.name: l for l in labels}
+    want = {label.name: label for label in labels}
     got = read_labels(labels_file_load)
 
     assert got == want
