@@ -27,7 +27,7 @@ def load_repository_info(remote_name: str = "origin") -> typing.Optional[Reposit
     )
 
     if proc.returncode != 0:
-        logger.debug(f"Error running git remote get-url.")
+        logger.debug("Error running git remote get-url.")
         return None
 
     remote_url = proc.stdout.strip()

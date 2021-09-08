@@ -263,21 +263,21 @@ def dryrun_echo(
     """Print information about how labels would be updated on sync."""
 
     if labels_to_delete:
-        click.echo(f"This would delete the following labels:")
+        click.echo("This would delete the following labels:")
         for name in labels_to_delete:
             click.echo(f"  - {name}")
 
     if labels_to_update:
-        click.echo(f"This would update the following labels:")
+        click.echo("This would update the following labels:")
         for name in labels_to_update:
             click.echo(f"  - {name}")
 
     if labels_to_create:
-        click.echo(f"This would create the following labels:")
+        click.echo("This would create the following labels:")
         for name in labels_to_create:
             click.echo(f"  - {name}")
 
     if labels_to_ignore:
-        click.echo(f"This would NOT modify the following labels:")
+        click.echo("This would NOT modify the following labels:")
         for name in labels_to_ignore:
             click.echo(f"  - {name}")
