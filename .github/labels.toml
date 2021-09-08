@@ -3,6 +3,11 @@ color = "ffeb95"
 name = "bug"
 description = "Bugs and problems with labels"
 
+[actions]
+color = "c792ea"
+name = "actions"
+description = "Tasks related to GitHub Actions"
+
 ["code quality"]
 color = "c792ea"
 name = "code quality"
