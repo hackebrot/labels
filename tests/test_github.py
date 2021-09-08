@@ -42,7 +42,7 @@ def test_list_labels(client: Client, repo: Repository) -> None:
         },
     ]
 
-    assert [l.params_dict for l in labels] == expected_params
+    assert [label.params_dict for label in labels] == expected_params
 
 
 @pytest.mark.usefixtures("mock_list_labels_paginated")
@@ -68,7 +68,7 @@ def test_list_labels_pagination(client: Client, repo: Repository) -> None:
         },
     ]
 
-    assert [l.params_dict for l in labels] == expected_params
+    assert [label.params_dict for label in labels] == expected_params
 
 
 @pytest.mark.usefixtures("mock_get_label")

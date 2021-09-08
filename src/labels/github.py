@@ -84,7 +84,7 @@ class Client:
 
         while next_page is not None:
 
-            logger.debug(f"Requesting next page of labels")
+            logger.debug("Requesting next page of labels")
             response = self.session.get(next_page["url"], headers=headers)
 
             if response.status_code != 200:
