@@ -1,6 +1,6 @@
 import typing
 
-import pytoml
+import tomli
 
 from labels.github import Label
 from labels.io import write_labels, read_labels
@@ -14,8 +14,8 @@ def test_write_labels(
     """
     write_labels(labels_file_write, labels)
 
-    with open(labels_file_write, "r") as labels_file:
-        obj = pytoml.load(labels_file)
+    with open(labels_file_write, "rb") as labels_file:
+        obj = tomli.load(labels_file)
 
     assert obj == labels_file_dict
 

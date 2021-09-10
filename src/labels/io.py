@@ -1,7 +1,8 @@
 import logging
 import typing
 
-import pytoml
+import tomli
+import tomli_w
 
 from labels.github import Label
 
@@ -13,8 +14,8 @@ def write_labels(filename: str, labels: typing.List[Label]) -> None:
 
     obj = {label.name: label.params_dict for label in labels}
 
-    with open(filename, "w") as labels_file:
-        pytoml.dump(obj, labels_file)
+    with open(filename, "wb") as labels_file:
+        tomli_w.dump(obj, labels_file)
 
 
 def read_labels(filename: str) -> typing.Dict[str, Label]:
@@ -22,7 +23,7 @@ def read_labels(filename: str) -> typing.Dict[str, Label]:
     logger = logging.getLogger("labels")
     logger.debug(f"Reading labels from {filename}")
 
-    with open(filename, "r") as labels_file:
-        obj = pytoml.load(labels_file)
+    with open(filename, "rb") as labels_file:
+        obj = tomli.load(labels_file)
 
     return {name: Label(**values) for name, values in obj.items()}
