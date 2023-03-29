@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, Generator, List
 
 import attr
@@ -442,7 +443,7 @@ def fixture_labels_file_content() -> Dict[str, Any]:
 def fixture_labels_file_write(tmpdir: Any) -> str:
     """Return a filepath to a temporary file."""
     labels_file = tmpdir.join("labels.toml")
-    return str(labels_file)
+    return Path(labels_file).as_posix()
 
 
 @pytest.fixture(name="labels_file_load")
