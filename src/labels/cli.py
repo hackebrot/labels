@@ -281,3 +281,7 @@ def dryrun_echo(
         click.echo("This would NOT modify the following labels:")
         for name in labels_to_ignore:
             click.echo(f"  - {name}")
+
+
+if __name__ == '__main__':
+    labels()
