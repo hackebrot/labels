@@ -26,7 +26,10 @@ class Label:
 
     color: str
     name: str
-    description: str = ""
+    description: str = attr.field(
+        default="",
+        converter=attr.converters.default_if_none("")
+    )
 
     # Read-only attributes
     _default: bool = False
