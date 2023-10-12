@@ -1,0 +1,28 @@
+name: "Labels"
+description: "Sync Github labels"
+
+inputs:
+  token:
+    description: "GitHub access token"
+    required: true
+  username:
+    description: "GitHub username"
+    required: true
+  filename:
+    description: "Filename for labels"
+    default: ".github/labels.toml"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install labels
+      run: pip install labels
+      shell: bash
+    - name: Sync config with GitHub
+      run: |
+        labels \
+          -t ${{ inputs.token }} \
+          -u ${{ inputs.username }} \
+          sync \
+          -f ${{ inputs.filename }}
+      shell: bash
