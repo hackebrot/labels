@@ -64,7 +64,7 @@ def default_owner(labels_context: LabelsContext) -> str:
         repository = utils.load_repository_info()
         if repository is None:
             raise click.BadParameter(
-                "Unable to read respository owner from git remote URL."
+                "Unable to read repository owner from git remote URL."
             )
         labels_context.repository = repository
     return labels_context.repository.owner
