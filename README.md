@@ -157,6 +157,44 @@ If **labels** encounters any errors while sending requests to the GitHub API,
 it will print information about the failure and continue with the next label
 until it has processed all of the labels.
 
+### GitHub action
+
+This repo also offers a composite GitHub action that can be used to sync
+labels on each push to the default branch. To use it, create a workflow file
+in your repo's ``.github/workflows`` directory with the following content:
+
+```yaml
+name: Sync Github labels
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/**"
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      # Permissions required to sync labels
+      issues: write
+      
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - name: Sync config with Github
+        uses: hackebrot/labels@main
+        with:
+          username: ${{ github.repository_owner }}  # required
+          token: ${{ secrets.GITHUB_TOKEN }}  # required
+          filename: .github/labels.toml  # optional, this is the default value
+```
+
 ## Community
 
 Please check out the [good first issue][good first issue] label for tasks,
